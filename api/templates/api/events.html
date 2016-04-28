@@ -154,27 +154,35 @@
 
 							<center>
 								<div class = "container-content" style="display:inline-block">
-									<input type="button" id="button{{e.id}}" value = "Yes, I am going!" style= "color:white"  style="height:500px;width:50px" onclick="rsvp({{e.id}})"/>
+									<input type="button" id="button{{e.id}}" value = "RSVP (Toggle)" style= "color:white"  style="height:500px;width:50px" onclick="rsvp({{e.id}})"/>
 
 									<form style="display:inline-block">
-										<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="showRSVP(rsvp{{e.id}})"/>
+										<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="showRSVP(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
 									</form>
 									<form style="display:inline-block">
-										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(attendance{{e.id}}, badgeText{{e.id}})"/>
+										<input type="button" value="{{e.count_join}} + Attended" style="height:30px;width:50px"                                                            onclick="showAttend(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
+									</form>
+									<form style="display:inline-block">
+										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}}, 'badgeText{{e.id}}')"/>
 									</form> 
 									<form style="display:inline-block">
-										<input type="button" value="Edit" style="height:50px;width:60px" onclick="editEvent(hidden{{e.id}},shown{{e.id}})"/>
+										<input type="button" value="Edit" style="height:50px;width:60px" onclick="editEvent(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
 									</form> 
 									<form style="display:inline-block">
 										<input type="button" value="Delete" style="height:50px;width:80px" onclick="confirmDelete({{e.id}})"/>
 									</form><br>
 								</div>
-				
+				<!--
 						<form style="display:inline-block">
-							<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact()"/>
+							<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact(contact{{e.id}},attended{{e.id}})"/>
+						</form>-->
+
+						<form style="display:inline-block">
+							<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
 						</form>
+
 						<form style="display:inline-block">
-							<input type="button" value="Comment" style="height:30px;width:50px" onclick="showCommentBox(comment{{e.id}})"/>
+							<input type="button" value="Comment" style="height:30px;width:50px" onclick="showCommentBox(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})", />
 						</form>
 						</center>
 						
@@ -185,31 +193,46 @@
 							<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
 						</div>
 
-						<div id="contact" style="display:none"><br></center>
+						<div id="contact{{e.id}}" style="display:none"><br></center>
 							<address>
 								<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
 							</address>
 						</div>
 						<div id="rsvp{{e.id}}" style="display:none"><br><center>
 										Participants that have RSVP'd:<br>
-										<div id="rsvp{{e.id}}" style="display:none"><br>
 											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
 												<thead>
 													<tr>
-														<th data-priority="2">Rank</th>
 														<th>People Going!</th>
 
 													</tr>
 												</thead>
 												<tbody>
 													<tr>
-														<th>1</th>
-														<td>{{participation.user}}</td>      
+														<td>{{participation.user}}</td>
 													</tr>                                         
 												</tbody>
 											</table>
-											<br><br>
-										</div></center>
+											<br><br></center>
+										
+					</div>
+
+					<div id="attended{{e.id}}" style="display:none"><br><center>
+										Participants that have attended:<br>
+											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+												<thead>
+													<tr>
+														<th>People that attended the event.</th>
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{participation.user}}</td>
+													</tr>                                         
+												</tbody>
+											</table>
+											<br><br></center>
 										
 					</div>
 										<div id="attendance{{e.id}}" style="display:none"><br><center>
@@ -269,7 +292,7 @@
 
 function newUpload(pastevents){
 	//alert("hi!");
-	console.debug(pastevents);
+	console.debug({{pastevents}});
 	//json.pasre(pastevents);
 	document.getElementById('txtFileUpload').addEventListener('change', upload, false);
 
@@ -435,8 +458,14 @@ function ltrim(id, eventID) {
 		}
 
 		//displays the form to track attendance
-		function showAttendance(id, id2) {
-			id.style.display='inherit';
+		function showAttendance(commentID, aID, contactID, edit1, edit2, rsvpID, attendanceID, id2) {
+			commentID.style.display='none';
+		    aID.style.display='none';
+		    contactID.style.display='none';
+			edit2.style.display='inherit';
+			edit1.style.display='none';
+			rsvpID.style.display='none';
+		    attendanceID.style.display='inherit';
 			document.getElementById(id2).focus();
 		}
 
@@ -445,11 +474,14 @@ function ltrim(id, eventID) {
 		}
 
 		//hides the current event information, and displays the form to edit an event
-		function editEvent(id, id2) {
-			//var hiddenDiv = document.getElementById(id).value;
-			//var shownDiv = document.getElementById(id2).value;
-			id2.style.display='none';
-			id.style.display='inherit';
+		function editEvent(commentID, aID, contactID, edit1, edit2, rsvpID, attendanceID) {
+			commentID.style.display='none';
+		    aID.style.display='none';
+		    contactID.style.display='none';
+			edit2.style.display='none';
+			edit1.style.display='inherit';
+			rsvpID.style.display='none';
+		    attendanceID.style.display='none';
 			Form.fileURL.focus();
 		}
 
@@ -461,17 +493,25 @@ function ltrim(id, eventID) {
 			Form.fileURL.focus();
 		}
 
-		function showCommentBox(id) {
-		    id.style.display='inherit';
-		    contact.style.display='none';
-		    rsvp.style.display='none';
+		function showCommentBox(commentID, aID, contactID, edit1, edit2, rsvpID, attendanceID) {
+		    commentID.style.display='inherit';
+		    aID.style.display='none';
+		    contactID.style.display='none';
+		    edit1.style.display='none';
+		    edit2.style.display='inherit';
+		    rsvpID.style.display='none';
+		    attendanceID.style.display='none';
 		    Form.fileURL.focus();
 		  }
 
-		function showContact() {
-		    contact.style.display='inherit';
-		    comment.style.display='none';
-		    rsvp.style.display='none';
+		function showContact(commentID, aID, contactID, edit1, edit2, rsvpID, attendanceID) {
+		    commentID.style.display='none';
+		    aID.style.display='none';
+		    contactID.style.display='inherit';
+		    edit1.style.display='none';
+		    edit2.style.display='inherit';
+		    rsvpID.style.display='none';
+		    attendanceID.style.display='none';
 		    Form.fileURL.focus();
 		  }
 
@@ -490,14 +530,31 @@ function ltrim(id, eventID) {
                 	//alert(property.style.backgroundColor)  
                     property.style.backgroundColor = "#7FFF00"
                 }
+                alert(aID);
+            
 
             }
 		
 
-		function showRSVP(id) {
-			id.style.display='inherit';
-		    contact.style.display='none';
-		    comment.style.display='none';
+		function showRSVP(commentID, aID, contactID, edit1, edit2, rsvpID, attendanceID) {
+		    commentID.style.display='none';
+		    aID.style.display='none';
+		    contactID.style.display='none';
+		    edit1.style.display='none';
+		    edit2.style.display='inherit';
+		    rsvpID.style.display='inherit';
+		    attendanceID.style.display='none';
+		    Form.fileURL.focus();
+		  }
+
+		 function showAttend(commentID, aID, contactID, edit1, edit2, rsvpID, attendanceID) {
+		    commentID.style.display='none';
+		    aID.style.display='inherit';
+		    contactID.style.display='none';
+		    edit1.style.display='none';
+		    edit2.style.display='inherit';
+		    rsvpID.style.display='none';
+		    attendanceID.style.display='none';
 		    Form.fileURL.focus();
 		  }
             

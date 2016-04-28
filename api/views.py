@@ -209,6 +209,10 @@ def join(request):
 @csrf_exempt
 def rsvp(request):
 	try:
+		if not User.objects.filter(username=request.META['geuid']).exists():
+			query = User(username=request.META['geuid'], name=request.META['gefirstname']+" "+request.META['gelastname'], country="U.S.A", is_org=False, email=request.META['gemail'], donations=0)
+			query.save()
+		
 		user = User.objects.get(username=request.META['geuid'])
 		event = Event.objects.get(id=request.GET['eID'])
 		participation = Participation.objects.filter(user=user, event=event)

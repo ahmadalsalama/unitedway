@@ -17,6 +17,7 @@
 
 <body>
 	<section id="index" data-role="page">
+		
 		<div align="center" data-role="header">
 			<img src="../../../static/api/img/unitedway.png" alt="UnitedWay Logo" />
 			<div data-role="navbar">
@@ -32,7 +33,7 @@
 					{% endif %}
 					{% if not admin %}
 						<span>United Way Engagement Portal</span>
-					{% endif %}<span text-align="right">Hi, Michelle!</span></a>
+					{% endif %}</br><h3>Hi, Michelle!</h3></a>
             </div>
         </div>
     </nav>
@@ -59,16 +60,15 @@
         <div class="ui-content" role="main"> 
         
         <div data-demo-html="true" data-mini="true"> -->
-        	{% for e in events %}
+        	
         	<div class = "container content">
-        		<h3>{{e.donation}}</h3><br> <!--suggested donation per user */ -->
+        		 <!--suggested donation per user */ -->
         		Based on the events you have attended thus far in 2016, your suggested United Way donation is: <br>
-        		<br>
-        		<center><h3>$100</h3><br>
+        		<!-- display annual donation {{user.donations}}-->
+        		<br><h3>{{user.donations}}</h3><br>
         		Please make your donation here: www.unitedway.com
         		</center>
-        	{% endfor %}
-        
+
         	<div class = "container content">
         		<h3>Most active ISTC Paticipants of 2016</h3>
 		<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" >
@@ -85,10 +85,10 @@
 			    <tbody>
 			        <tr>
 				        <th>1</th>
-				        <td>{{u.username}}</td>
+				        <td>{{u.name}}</td>
 				        <td># of events attended by user</td>
 				        {% if admin %}
-				        <td>{{e.suggested_donation}}</td>
+				        <td>{{u.donations}}</td>
 				        {% endif %}         
 			        </tr>                                         
 			    </tbody>

@@ -16,9 +16,9 @@ class User(models.Model):
 		return "%s (%s)" % (self.name, dict(USER_TYPES)[self.is_org])
 
 class BadgeDB(models.Model):
-	username = models.CharField(max_length=15, primary_key=True) # SSO
+	username = models.CharField(max_length=15) # SSO
 	name = models.CharField(max_length=30) # First & Last Name
-	badgeNumber = models.CharField(max_length=20) #badge number
+	badgeNumber = models.CharField(max_length=20, primary_key=True) #badge number
 	def __str__(self):
 		return self.name
 

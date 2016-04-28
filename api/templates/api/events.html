@@ -18,7 +18,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
 </head>
 
-<body onload ="{% for e in pastevents %} addListener({{e.id}}); {% endfor %} newUpload('pastevents');">
+<body onload ="{% for e in pastevents %} newUpload({{e.id}}); {% endfor %}">
 	
 	<!-- Standard Page Header and Navigation-->
 	<section id="index" data-role="page">
@@ -288,18 +288,19 @@
 
 						<script type="text/javascript">
 
-function addListener(id) {
+/*function addListener(id) {
 	console.log("txtFileUpload" + id);
-	document.getElementById('txtFileUpload' + id).addEventListener('change', upload, false);
-}
+	//document.getElementById('txtFileUpload' + id).addEventListener('change', upload, false);
+}*/
 
 // Function for importing drinks CSV
 
-function newUpload(pastevents){
+function newUpload(id){
 	//alert("hi!");
 	//console.debug({{pastevents}}[0]);
 	//json.pasre(pastevents);
-	
+	console.log(id);
+	document.getElementById('txtFileUpload' + id).addEventListener('change', upload, false);
 			
 
 		    // Method that checks that the browser supports the HTML5 File API

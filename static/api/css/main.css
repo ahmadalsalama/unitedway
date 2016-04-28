@@ -1,0 +1,143 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900);
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'Lato', sans-serif;
+}
+html, body {
+	background: #EEEEEE;
+	font-size: 15px;
+	text-align: center;
+}
+header {
+	height: 20px;
+	color: #fff;
+	background: #40414b;
+	padding: 10px;
+	line-height: 20px;
+}
+header h4 {
+	float: left;
+	width: calc(100% / 2);
+	text-align: left;
+}
+header h4:last-child {
+	text-align: right;
+}
+header div {
+	font-size: 10px;
+	text-align: center;
+	line-height: 30px;
+}
+.forth {
+	width: 25%;
+	float: left;
+	text-align: right;
+}
+.icon div {
+	width: 30px;
+	height: 18px;
+}
+.icon#liked div {
+	background: url('../img/like.png') no-repeat center center;
+	background-size: 40px 40px;
+}
+.icon#joined div {
+	background: url('../img/join.png') no-repeat center center;
+	background-size: 17px 17px;
+}
+.download {
+	position: absolute;
+	background: url('../img/down.png') no-repeat center center;
+	background-size: 35px 35px;
+	width: 20px;
+	height: 20px;
+	right: 15px;
+	cursor: pointer;
+}
+a {
+	-webkit-transition: color 300ms ease-out;
+	-moz-transition: color 300ms ease-out;
+	-ms-transition: color 300ms ease-out;
+	-o-transition: color 300ms ease-out;
+	transition: color 300ms ease-out;
+	text-decoration: none;
+	color: #00BCD4;
+	cursor: pointer;
+}
+a:hover {
+	color: #4DD0E1;
+}
+
+section {
+	display: block;
+}
+
+article {
+	bottom: 0;
+    position: absolute;
+    width: 90%;
+    height: 40px;
+}
+
+figure {
+	position:relative;
+	vertical-align: middle;
+	border-radius: 3px;
+	box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
+	background: #fff;
+	display: inline-block;
+	padding: 10px;
+	margin: 10px;
+	height: 250px;
+	width: 250px;
+	-webkit-transition: box-shadow 300ms ease-out;
+	-moz-transition: box-shadow 300ms ease-out;
+	-ms-transition: box-shadow 300ms ease-out;
+	-o-transition: box-shadow 300ms ease-out;
+	transition: box-shadow 300ms ease-out;
+	text-align: left;
+}
+
+figure a {
+	text-decoration: none;
+	color: #111;
+}
+
+figure figcaption {
+	line-height: 1.4;
+	padding: 0 5px;
+	margin: 10px 0 0 0;
+}
+
+figure figcaption strong {
+	text-transform: uppercase;
+}
+
+figure figcaption tag {
+	display: block;
+	color: #CC0099;
+	font-size: 14px;
+}
+
+figure figcaption p {
+	text-decoration: none;
+	opacity: 0.8;
+}
+
+figure figcaption p a {
+	text-decoration: underline;
+}
+
+footer {
+	margin: 20px 0;
+	bottom: 0;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+}
+
+footer p {
+	margin: 10px 0 0 0;
+	color: #555;
+}

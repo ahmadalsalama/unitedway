@@ -1,0 +1,140 @@
+{% load staticfiles %}
+<html>
+
+	<!-- Standard Page Header and Navigation-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Events</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<link rel="stylesheet" href="{% static "api/css/iids.min-blessed1.css" %}"/>
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	
+	<link  href="{% static "api/css/main.css" %}" 			rel="stylesheet" type="text/css"/>
+	<script src="{% static "api/js/jquery.min.js" %}" 		type="text/javascript"></script>
+</head>
+<body onload ="newUpload('{{events}}');">
+	<section id="index" data-role="page">
+		<div align="center" data-role="header">
+			<img src="{% static "api/img/unitedway.png" %}" alt="UnitedWay Logo" />
+			<div data-role="navbar">
+			</div>
+		</div>
+
+		<nav class="navbar navbar-static-top navbar-default" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand"><span class="ge-logo"></span> <span>United Way Engagement Portal</span></a>
+					<a class="navbar-brand" align="left"><span class="ge-logo"></span> <span>Hi, Michelle!</span></a>
+				</div>
+
+			</div>
+		</nav>
+
+		<div class="primary-navbar nav-collapse">
+			<div class="container">  
+				<ul class="nav navbar-nav">
+					<li><a href="uevents.html">Events</a></li>
+					<li><a href="uannual.html">Annual Participation</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class = "content container">
+
+		<!-- Welcome message-->
+			<div id='page' style='width: 1140px'>
+				<h3 style='font-size:23px;'>Welcome to the ISTC United Way Engagement console. Through this portal you will have the ability to view a timeline of events taking place at the ISTC, and RSVP to events you want to attend  You can also track your attendance of United Way Events, and how you stand within the ISTC.  Enjoy the power!</h3>
+			</div>
+
+			<div class="iidx-wrapper">
+				<br> </br>
+				<p><strong>Upcoming Events</strong><p>
+
+			<!--Loop to display upcoming events-->
+					
+					{% for e in events %}
+					<!--
+						<figure id="figure-{{e.id}}">
+							<figcaption>
+								<div class="download" id="{{e.id}}" title="Export {{e.name}}"></div>
+								<strong>{{e.name}}</strong>
+								<tag>{{e.category}}</tag>
+								<br>
+								<p>{{e.description}} Organized by {{e.org}}.</p>
+							</figcaption>
+							<article>
+								<p class="forth count">{{e.count_rsvpd}}</p><div class="forth icon" id="liked"><div></div></div>
+								<p class="forth count">{{e.count_joined}}</p><div class="forth icon" id="joined"><div></div></div>
+							</article>
+						</figure>
+						-->
+					
+					<div data-role="collapsibleset" data-theme="a" data-content-theme="a" data-mini="true">
+						<div data-role="collapsible">
+							<h3>{{e.name}}</h3>
+							Event Name: {{e.name}}<br>
+							Event Date: {{e.start_date}}<br>
+							{{e.description}} Organized by {{e.org}}.<br>
+							<center>
+								<form style="display:inline-block">
+									<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact()"/>
+								</form> 
+								<form style="display:inline-block">
+									<input type="button" value="Comment" style="height:30px;width:50px" onclick="showCommentBox()"/>
+								</form></center>
+
+								<div id="comment" style="display:none"><br>
+									Comments, Questions, or Concerns:<br>
+									<textarea name='comment' id='commentbox'></textarea><br>
+									<input type='submit' value='Submit Comment'style="height:30px;width:50px">
+								</div>
+
+								<div id="contact" style="display:none"><br></center>
+									<address>
+										<a href="mailto:anthony.giliberti@ge.com">{{e.org}}</a><br> 
+									</address>
+								</div>
+							</div>
+							<!--
+							<p><strong>Past Events</strong><p>
+								<div data-role="collapsibleset" data-theme="a" data-content-theme="a" data-mini="true">
+									<div data-role="collapsible">
+										<h3>Cinco de Mayo 5/5/2016</h3>
+										Event Name: Cinco de Mayo<br>
+										Event Date: 5/5/2016<br>
+									</div>
+								</div>
+								-->
+								<!-- /footer -->
+								{% endfor %}
+								
+							</section>
+							<div data-role="footer">
+									<h4>&copy; GE United Way!</h4>
+								</div>
+							<script type = "text/javascript">
+								function showCommentBox() {
+								    comment.style.display='inherit';
+								    contact.style.display='none';
+								    Form.fileURL.focus();
+								  }
+								function showContact() {
+								    contact.style.display='inherit';
+								    comment.style.display='none';
+								    Form.fileURL.focus();
+								  }
+								function hideDiv() {
+								    shown.style.display='none';
+								    hidden.style.display='inherit';
+								    Form.fileURL.focus();
+								  }
+								  function newUpload(events){
+										alert("hi!");
+										//console.debug(pastevents);
+									}
+							</script>
+						</body>
+						</html>

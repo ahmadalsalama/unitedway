@@ -1,0 +1,12 @@
+            {% if admin %}
+            <a href="{% url ahmadsapp.views.uploader %}">upload a local image</a>
+            <p></p>
+            <a href="{% url ahmadsapp.views.uploaderurl %}">upload a remote image</a>
+            <p></p>
+            {% endif %}
+            
+            {% if events %}
+                {% for e in events %}
+                  <div> stuff </div>
+                {% endfor %}
+            {% endif %}

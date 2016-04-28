@@ -1,0 +1,465 @@
+{% load staticfiles %}
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Events</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<link rel="stylesheet" href="{% static "api/css/iids.min-blessed1.css" %}"/>
+
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<!--<script src="{% static "api/js/userFrontEnd.js" %}" type="text/javascript"></script>-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
+</head>
+
+<body onload ="newUpload('{{events}}');">
+
+	<!-- Standard Page Header and Navigation-->
+	<section id="index" data-role="page">
+		Hi, Michelle!
+		<div align="center" data-role="header">
+			
+			<img src="../../../static/api/img/unitedway.png" alt="UnitedWay Logo" />
+			<div data-role="navbar">
+			</div>
+		</div>
+
+		<nav class="navbar navbar-static-top navbar-default" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand"><span class="ge-logo"></span> 
+						{% if admin %}
+							<span>United Way Admin Portal</span></a>
+						{% endif %}
+						{% if not admin %}
+							<span>United Way Engagement Portal</span>
+						{% endif %}<text align="right">	Hi, Michelle!</text></a>
+				</div>
+			</div>
+		</nav>
+
+		<div class="primary-navbar nav-collapse">
+			<div class="container">  
+				<ul class="nav navbar-nav">
+					<li><a href="events.html">Events</a></li>
+					{% if admin %}
+					<li class="active"><a href="create.html">Create Event</a></li>
+					{% endif %}
+					<li><a href="annual.html">Annual Stats</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- Welcome message-->
+
+		<div class = "content container">
+			<div id='page'>
+				{% if admin %}
+				<h3 style=' font-size:23px;'>Welcome to the ISTC United Way Admin console. Through this portal you will have the ability to view a timeline of events taking place at the ISTC as well as add a new event that is scheduled to take place.  You can also track the attendance activity of set users and which events they attend through the year. Enjoy the power!</h3>
+				{% endif %}
+
+				{% if not admin %}
+				<h3 style='font-size:23px;'>Welcome to the ISTC United Way Engagement console. Through this portal you will have the ability to view a timeline of events taking place at the ISTC, and RSVP to events you want to attend  You can also track your attendance of United Way Events, and how you stand within the ISTC.  Enjoy the power!</h3>
+				{% endif %}
+			</div>
+
+			<!--Loop to display upcoming events-->
+
+			<div class="iidx-wrapper">
+				<br> </br>
+				<p><strong>Upcoming Events</strong><p>
+
+					{% if events %}
+					{% for e in events %}
+            <!--
+						<figure id="figure-{{e.id}}">
+							<figcaption>
+								<div class="download" id="{{e.id}}" title="Export {{e.name}}"></div>
+								<strong>{{e.name}}</strong>
+								<tag>{{e.category}}</tag>
+								<br>
+								<p>{{e.description}} Organized by {{e.org_name}}.</p>
+							</figcaption>
+							<article>
+								<p class="forth count">{{e.count_rsvpd}}</p><div class="forth icon" id="liked"><div></div></div>
+								<p class="forth count">{{e.count_joined}}</p><div class="forth icon" id="joined"><div></div></div>
+							</article>
+						</figure>
+					-->
+					<div data-role="collapsibleset" data-theme="a" data-content-theme="a" data-mini="true">
+
+						<div data-role="collapsible">
+							<!--Header of the event-->
+							<h3>{{e.name}}  {{e.start_date}}</h3>
+
+							<!--Original div that is shown containing the information about created events-->
+							<div id="shown{{e.id}}" style="display:inherit"><br>
+								Event Name: {{e.name}}<br>
+								Event Coordinator: {{e.org_name}}<br>
+								Event Description: {{e.description}}<br>
+								Event Date: {{e.start_date}}<br>
+								Event Time: {{e.start_time}}<br>
+								Event Capacity: {{e.max_capacity}}<br>
+								People RSVPed: {{e.count_rsvpd}} number of people attended<br><center>
+							</div>
+
+
+							<!--Div shown when edit event is clicked-->
+
+							<div id="hidden{{e.id}}" style="display:none"><br>
+								<label>Event Name:</label>
+								<input type="text" id="name{{e.id}}" value={{e.name}}>
+								<div class="form-group">
+									<label>Event Coordinator:</label>
+									<input type="text" id="sso{{e.id}}" value={{e.org_username}}>
+								</div>
+								<div class="form-group">
+									<label>Event Description:</label>
+									<input type="Text" id="description{{e.id}}" value={{e.description}}>
+								</div>
+
+								<div class="form-group">
+									<label>Event Date:</label>
+									<input type="Date" id="date{{e.id}}" value={{e.start_date}}>
+								</div>
+
+								<div class="form-group">
+									<label>Event Time:</label>
+									<input type="Time" id="time{{e.id}}" value={{e.start_time}}>
+								</div>
+
+								<div class="form-group">
+									<label>Suggest Donation ($):</label>
+								<input type="number" id="donation{{e.id}}" placeholder="Dollar Amount&#8230;">
+								</div>
+
+								<div class="form-group">
+									<label>Event Capacity:</label>
+									<input id="capacity{{e.id}}" type="range" min="1" max="250" step="1" value={{e.max_capacity}}/>
+								</div><center>
+								<button type="edit" class="btn" style="height:50px;width:100px" onclick="confirmUpdate({{e.id}})">Update Event</button>
+								<button type="edit" class="btn" style="height:50px;width:100px" onclick="cancelUpdate(hidden{{e.id}},shown{{e.id}})">Cancel</button></center>
+							</div> 
+
+							<!--Buttons in form for admins to track attendance, edit, delete, and upload drink csvs for events-->
+							<!--allow organizer to edit event-->
+
+							<center>
+								<div class = "container-content" style="display:inline-block">
+									<input type="button" id="button" value = "Yes, I am going!" style= "color:white"  style="height:500px;width:50px" onclick="setColor('button', '#006600')";/>
+									<form style="display:inline-block">
+										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(attendance{{e.id}})"/>
+									</form> 
+
+									<form style="display:inline-block">
+										<input type="button" value="Edit" style="height:50px;width:60px" onclick="editEvent(hidden{{e.id}},shown{{e.id}})"/>
+									</form> 
+
+									<form style="display:inline-block">
+										<input type="button" value="Delete" style="height:50px;width:80px" onclick="confirmDelete({{e.id}})"/>
+									</form><br>
+								</div>
+								<div id="attendance{{e.id}}" style="display:none"><br>
+									<label>Participant Badge Number: </label>
+									<form style="display:inline-block">
+										<input type="text" id="badgeText{{e.id}}" placeholder="Badge scan number&#8230;"/>
+										<input type="button" value="Add Participant" style="height:50px;width:200px" onclick="ltrim('badgeText{{e.id}}','{{e.id}}')"/>
+									</form>
+								</div>
+							</center>
+						</div>
+						{% if not admin %}
+						<form style="display:inline-block">
+							<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact()"/>
+						</form>
+						<form style="display:inline-block">
+							<input type="button" value="Comment" style="height:30px;width:50px" onclick="showCommentBox(comment{{e.id}})"/>
+						</form></center>
+
+						<div id="comment{{e.id}}" style="display:none"><br>
+							Comments, Questions, or Concerns:<br>
+							<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
+							<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
+						</div>
+
+						<div id="contact" style="display:none"><br></center>
+							<address>
+								<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
+							</address>
+						</div>
+					</div>
+						{% endif %}
+						{% endfor %}
+						{% endif %}
+
+						<br></br>
+
+						<!--Loop to display past events-->
+
+						{% if events %}
+
+						<p><strong>Past Events</strong><p>
+							{% for e in pastevents %}
+							<div data-role="collapsibleset" data-theme="a" data-content-theme="a" data-mini="true">
+								<div data-role="collapsible">
+									<h3>{{e.name}}  {{e.start_date}}</h3>
+									Event Name: {{e.name}}<br>
+									Event Coordinator: {{e.org_name}}<br>
+									Event Description: {{e.description}}<br>
+									Event Date: {{e.start_date}}<br>
+									Event Time: {{e.start_time}}<br>
+									Event Capacity: {{e.max_capacity}}<br>
+									People RSVPed: {{e.count_rsvpd}} number of people rsvpd<br><center>
+									People Attended: {{e.count_joined}} number of people attended<br>
+									<!--still need show comments, if show actual attended people, only admin-->
+									{% if admin %}
+									<input type="file" name="File Upload" id="txtFileUpload" + {{e.id}} accept=".csv" style = "display:inherit"/>
+									<form style="display:inline-block">
+										<button type="edit" class="btn-mini" style="height:30px;width:50px" onclick="confirmDelete({{e.id}})">Delete</button></center>
+									</form>
+										{% endif %}
+									</div>
+								</div>
+								{% endfor %}
+								{% endif %}
+							</div>
+						<!--</div>-->
+					</div>
+
+
+							<div data-role="footer">
+								<h4>&copy; GE United Way!</h4>
+							</div>
+						</section>
+
+						<script type="text/javascript">
+
+// Function for importing drinks CSV
+
+function newUpload(pastevents){
+	//alert("hi!");
+	console.debug(pastevents);
+	//json.pasre(pastevents);
+	document.getElementById('txtFileUpload').addEventListener('change', upload, false);
+
+		    // Method that checks that the browser supports the HTML5 File API
+		    function browserSupportFileUpload() {
+		    	var isCompatible = false;
+		    	if (window.File && window.FileReader && window.FileList && window.Blob) {
+		    		isCompatible = true;
+		    	}
+		    	return isCompatible;
+		    }
+
+		    // Method that reads and processes the selected file
+		    function upload(evt) {
+		    	if (!browserSupportFileUpload()) {
+		    		alert('The File APIs are not fully supported in this browser!');
+		    	} else {
+		    		var data = null;
+		    		var file = evt.target.files[0];
+		    		var reader = new FileReader();
+		    		reader.readAsText(file);
+		    		reader.onload = function(event) {
+		    			var csvData = event.target.result;
+		    			var options={"separator" : "*"};
+		    			data = $.csv.toArrays(csvData, options);
+		                    //console.debug(data);
+		                    if (data && data.length > 0) {
+		                    	alert(+ data[0].length + ' drinks uploaded successfully! ');
+		                    } else {
+		                    	alert('No data to import!');
+		                    }
+
+		                    for (var i = 0; i < data[0].length - 1; i++) {
+		                    	var str = data[0][i];
+		                    	var chr = '15E0'
+		                    	var rgxtrim = (!chr) ? new RegExp('^\\s+') : new RegExp('^'+chr+'+');
+		                    	var leftString = str.replace(rgxtrim, '');
+		                        //console.log(str);
+		                       // console.log(leftString);
+		                       var decString = parseInt(leftString, 16);
+		                       console.log(decString);
+
+		                        //console.debug(data[0][i]);
+		                    }
+		                };
+		                reader.onerror = function() {
+		                	alert('Unable to read ' + file.fileName);
+		                };
+		            }
+		        }
+		    }
+
+		/*    $(document).ready(function() {
+
+	     The event listener for the file upload
+
+	    	document.getElementById('txtFileUpload').addEventListener('change', upload, false);
+
+		    // Method that checks that the browser supports the HTML5 File API
+		    function browserSupportFileUpload() {
+		        var isCompatible = false;
+		        if (window.File && window.FileReader && window.FileList && window.Blob) {
+		        isCompatible = true;
+		        }
+		        return isCompatible;
+		    }
+
+		    // Method that reads and processes the selected file
+		    function upload(evt) {
+		        if (!browserSupportFileUpload()) {
+		            alert('The File APIs are not fully supported in this browser!');
+		            } else {
+		                var data = null;
+		                var file = evt.target.files[0];
+		                var reader = new FileReader();
+		                reader.readAsText(file);
+		                reader.onload = function(event) {
+		                    var csvData = event.target.result;
+		                    var options={"separator" : "*"};
+		                    data = $.csv.toArrays(csvData, options);
+		                    //console.debug(data);
+		                    if (data && data.length > 0) {
+		                    alert(+ data[0].length + ' drinks uploaded successfully! ');
+		                    } else {
+		                        alert('No data to import!');
+		                    }
+
+		                    for (var i = 0; i < data[0].length - 1; i++) {
+		                        var str = data[0][i];
+		                        var chr = '15E0'
+		                        var rgxtrim = (!chr) ? new RegExp('^\\s+') : new RegExp('^'+chr+'+');
+		                        var leftString = str.replace(rgxtrim, '');
+		                        //console.log(str);
+		                       // console.log(leftString);
+		                        var decString = parseInt(leftString, 16);
+		                        console.log(decString);
+
+		                        //console.debug(data[0][i]);
+		                    }
+		                };
+		                reader.onerror = function() {
+		                    alert('Unable to read ' + file.fileName);
+		                };
+		            }
+		        }
+		    });*/
+
+function ltrim(id, eventID) {
+	var str = document.getElementById(id).value;
+	if (str.length != 0) {
+		var chr = '15E0'
+		var rgxtrim = (!chr) ? new RegExp('^\\s+') : new RegExp('^'+chr+'+');
+		var leftString = str.replace(rgxtrim, '');
+				  /*console.log(str);
+				  console.log(leftString);*/
+				  var decString = parseInt(leftString, 16);
+				  console.log(decString);
+				  alert(decString + "   " + eventID);
+
+				  $.ajax({ url: '/add/attendee/', type: 'GET', data: {badgenum: decString, eID: eventID} }) .done(function(response){ console.log(response); });
+
+				//make call to input in DB *Ahmad
+				// LIKE: inputToDB(decString, eventID)
+
+				//reset form for new input
+				document.getElementById(id).value = "";
+				document.getElementById(id).focus();
+			}
+			else {
+				alert("No badge scanned.");
+			}
+		}
+
+		// confirms with the user to delete the event
+		function confirmDelete(id) {
+			if (confirm("Are you sure you want to delete this event?")) {
+				$.ajax({ url: '/delete/event/', type: 'GET', data: {eventID: id } }) .done(function(response){ console.log(response); });
+				alert("Your event has been deleted!");
+			}
+		}
+
+/*
+		function addComment(){
+		// to do tomorrow
+		alert("Your comment has been added!");
+		$.ajax({ url: '/comment/event/', type: 'GET', data: {name: eName, comment: commentText,, start_date: eDate + '-' + eTime} }) .done(function(response){ console.log(response); });
+
+		}
+*/
+		//updates event in events table
+		function confirmUpdate(id) {
+		  var eName = document.getElementById("name" + id).value;
+	      var eSSO = document.getElementById("sso" + id).value;
+	      var eDescription = document.getElementById("description" + id).value;
+	      var eDate = document.getElementById("date" + id).value;
+	      var eTime = document.getElementById("time" + id).value;
+	      var eDonation = document.getElementById("donation" + id).value;
+	      var eCapacity = document.getElementById("capacity" + id).value;
+	      $.ajax({ url: '/update/event/', type: 'GET', data: {eventID: id, org_username: eSSO, name: eName, description: eDescription, max_capacity: eCapacity, start_date: eDate + '-' + eTime, suggested_donation: eDonation } }) .done(function(response){ console.log(response); });
+			alert("Your event has been updated!");
+			//refresh/update section
+		}
+
+		//displays the form to track attendance
+		function showAttendance(id) {
+			id.style.display='inherit';
+			Form.fileURL.focus();
+		}
+
+		function setFocus(id) {
+			document.getElementById(id).focus();
+		}
+
+		//hides the current event information, and displays the form to edit an event
+		function editEvent(id, id2) {
+			//var hiddenDiv = document.getElementById(id).value;
+			//var shownDiv = document.getElementById(id2).value;
+			id2.style.display='none';
+			id.style.display='inherit';
+			Form.fileURL.focus();
+		}
+
+		function cancelUpdate(id, id2) {
+			//var hiddenDiv = document.getElementById(id).value;
+			//var shownDiv = document.getElementById(id2).value;
+			id2.style.display='inherit';
+			id.style.display='none';
+			Form.fileURL.focus();
+		}
+
+		function showCommentBox(id) {
+		    id.style.display='inherit';
+		    contact.style.display='none';
+		    Form.fileURL.focus();
+		  }
+
+		function showContact() {
+		    contact.style.display='inherit';
+		    comment.style.display='none';
+		    Form.fileURL.focus();
+		  }
+
+		 function setColor(btn, color){
+            var count=1;
+            var property = document.getElementById(btn);
+                if (count == 0){
+                    property.style.backgroundColor = "#FFFFFF"
+                    count=1;        
+                }
+                else{
+                    property.style.backgroundColor = "#7FFF00"
+                    count=0;
+                }
+
+                }
+		</script>
+	</body>
+</html>

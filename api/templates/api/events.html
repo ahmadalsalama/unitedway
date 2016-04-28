@@ -18,8 +18,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
 </head>
 
-<body onload ="newUpload('pastevents');">
-	<p>test {{pastevents}}</p>
+<body onload ="{% for e in pastevents %} addListener({{e.id}}); {% endfor %} newUpload('pastevents');">
+	
 	<!-- Standard Page Header and Navigation-->
 	<section id="index" data-role="page">
 		Hi, Michelle!
@@ -77,7 +77,7 @@
 
 					{% if events %}
 					{% for e in events %}
-            <!--
+            <!--	
 						<figure id="figure-{{e.id}}">
 							<figcaption>
 								<div class="download" id="{{e.id}}" title="Export {{e.name}}"></div>
@@ -267,7 +267,7 @@
 									People Attended: {{e.count_joined}} number of people attended<br>
 									<!--still need show comments, if show actual attended people, only admin-->
 									{% if admin %}
-									<input type="file" name="File Upload" id="txtFileUpload" + {{e.id}} accept=".csv" style = "display:inherit"/>
+									<input type="file" name="File Upload" id="txtFileUpload{{e.id}}" accept=".csv" style = "display:inherit"/>
 									<form style="display:inline-block">
 										<button type="edit" class="btn-mini" style="height:30px;width:50px" onclick="confirmDelete({{e.id}})">Delete</button></center>
 									</form>
@@ -288,13 +288,19 @@
 
 						<script type="text/javascript">
 
+function addListener(id) {
+	console.log("txtFileUpload" + id);
+	document.getElementById('txtFileUpload' + id).addEventListener('change', upload, false);
+}
+
 // Function for importing drinks CSV
 
 function newUpload(pastevents){
 	//alert("hi!");
-	console.debug({{pastevents}});
+	//console.debug({{pastevents}}[0]);
 	//json.pasre(pastevents);
-	document.getElementById('txtFileUpload').addEventListener('change', upload, false);
+	
+			
 
 		    // Method that checks that the browser supports the HTML5 File API
 		    function browserSupportFileUpload() {

@@ -208,33 +208,30 @@ def join(request):
 
 @csrf_exempt
 def rsvp(request):
-        try:
-                if not User.objects.filter(username=str(request.META['geuid'])).exists():
-                        query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", i\
+	try:
+		if not User.objects.filter(username=str(request.META['geuid'])).exists():
+			query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", i\
 s_org=False, email=str(request.META['gemail']), donations=0)
-                        query.save()
+			query.save()
 
-                user = User.objects.get(username=str(request.META['geuid']))
-                event = Event.objects.get(id=request.GET['eID'])
-                participation = Participation.objects.filter(user=user, event=event)
-                if len(participation) > 0:
-                        participation = participation[0]
-                        if participation.has_rsvpd:
-                                participation.has_rsvpd = False
-                        else:
-                                participation.has_rsvpd = True
-                        participation.save()
-                else:
-                        query = Participation(user=user, event=event, has_rsvpd=True)
-                        query.save()
-                response = HttpResponse(True, status=200)
-                response['access-control-allow-origin'] = '*'
-                return response
-                        #return HttpResponse("username added", status=200)
-                #else:
-                #        return HttpResponse("username exists", status=200)
-        except Exception as e:
-                return HttpResponse(str(e), status=500)
+		user = User.objects.get(username=str(request.META['geuid']))
+		event = Event.objects.get(id=request.GET['eID'])
+		participation = Participation.objects.filter(user=user, event=event)
+		if len(participation) > 0:
+			participation = participation[0]
+			if participation.has_rsvpd:
+				participation.has_rsvpd = False
+			else:
+				participation.has_rsvpd = True
+				participation.save()
+		else:
+			query = Participation(user=user, event=event, has_rsvpd=True)
+			query.save()
+			response = HttpResponse(True, status=200)
+			response['access-control-allow-origin'] = '*'
+			return response
+	except Exception as e:
+		return HttpResponse(str(e), status=500)
 		
 def addcomment(request, eventID):
 	try:

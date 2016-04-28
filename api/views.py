@@ -209,11 +209,12 @@ def join(request):
 @csrf_exempt
 def rsvp(request):
 	try:
-		if not User.objects.filter(username=request.META['geuid']).exists():
-			query = User(username=request.META['geuid'], name=request.META['gefirstname']+" "+request.META['gelastname'], country="U.S.A", is_org=False, email=request.META['gemail'], donations=0)
+		if not User.objects.filter(username=str(request.META['geuid'])).exists():
+			query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", i\
+s_org=False, email=str(request.META['gemail']), donations=0)
 			query.save()
-		
-		user = User.objects.get(username=request.META['geuid'])
+
+		user = User.objects.get(username=str(request.META['geuid']))
 		event = Event.objects.get(id=request.GET['eID'])
 		participation = Participation.objects.filter(user=user, event=event)
 		if len(participation) > 0:
@@ -222,14 +223,13 @@ def rsvp(request):
 				participation.has_rsvpd = False
 			else:
 				participation.has_rsvpd = True
-			participation.save()
+				participation.save()
 		else:
 			query = Participation(user=user, event=event, has_rsvpd=True)
 			query.save()
-		response = HttpResponse(True, status=200)
-		response['access-control-allow-origin'] = '*'
-		update(request)
-		return response
+			response = HttpResponse(True, status=200)
+			response['access-control-allow-origin'] = '*'
+			return response
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
 		

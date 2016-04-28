@@ -46,7 +46,7 @@ def getEvents(request, index=False):
 		for event in Event.objects.filter(start_date__gte=datetime.today()):
 			count_joined = len(Participation.objects.filter(event=event, has_joined=True))
 			count_rsvpd = len(Participation.objects.filter(event=event, has_rsvpd=True))
-			events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
+			events[event.id] = {'id':event.id, 'canEdit':canEdit, 'name':event.name, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
 			#events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description, 'category':dict(CATEGORY_CHOICES)[event.category], 'start_date':event.start_date.strftime("%d-%m-%Y"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'org':event.org.name, 'count_liked':count_liked, 'count_joined':count_joined}
 		if index:
 			return events
@@ -194,10 +194,7 @@ def join(request):
 		participation = Participation.objects.filter(user=user, event=event)
 		if len(participation) > 0:
 			participation = participation[0]
-			if participation.has_joined:
-				participation.has_joined = False
-			else:
-				participation.has_joined = True
+			participation.has_joined = True
 			participation.save()
 		else:
 			query = Participation(user=user, event=event, has_joined=True)
@@ -212,8 +209,8 @@ def join(request):
 @csrf_exempt
 def rsvp(request):
 	try:
-		user = User.objects.get(username=request.GET['user'])
-		event = Event.objects.get(id=request.GET['event'])
+		user = User.objects.get(username=request.META['geuid'])
+		event = Event.objects.get(id=request.GET['eID'])
 		participation = Participation.objects.filter(user=user, event=event)
 		if len(participation) > 0:
 			participation = participation[0]

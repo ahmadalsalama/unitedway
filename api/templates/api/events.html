@@ -18,8 +18,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
 </head>
 
-<body onload ="newUpload();">
-
+<body onload ="newUpload('pastevents');">
+	<p>test {{pastevents}}</p>
 	<!-- Standard Page Header and Navigation-->
 	<section id="index" data-role="page">
 		Hi, Michelle!
@@ -189,7 +189,7 @@
 								<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
 							</address>
 						</div>
-						<div id="rsvp{{e.id}}" style="display:none"><br>
+						<div id="rsvp{{e.id}}" style="display:none"><br><center>
 										Participants that have RSVP'd:<br>
 										<div id="rsvp{{e.id}}" style="display:none"><br>
 											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
@@ -208,15 +208,16 @@
 												</tbody>
 											</table>
 											<br><br>
-										</div>
-										<div id="attendance{{e.id}}" style="display:none"><br>
+										</div></center>
+										
+					</div>
+										<div id="attendance{{e.id}}" style="display:none"><br><center>
 											<label>Participant Badge Number: </label>
 											<form style="display:inline-block">
 												<input type="text" id="badgeText{{e.id}}" placeholder="Badge scan number&#8230;"/>
-										<input type="button" value="Add Participant" style="height:50px;width:200px" onclick="ltrim('badgeText{{e.id}}','{{e.id}}')"/>
-									</form>
-								</div>
-					</div>
+												<input type="button" value="Add Participant" style="height:50px;width:200px" onclick="ltrim('badgeText{{e.id}}','{{e.id}}')"/>
+											</form>
+										</div></center>
 					</div>
 						{% endfor %}
 						{% endif %}
@@ -265,8 +266,8 @@
 
 // Function for importing drinks CSV
 
-function newUpload(){
-	alert("hi!");
+function newUpload(pastevents){
+	//alert("hi!");
 	console.debug(pastevents);
 	//json.pasre(pastevents);
 	document.getElementById('txtFileUpload').addEventListener('change', upload, false);

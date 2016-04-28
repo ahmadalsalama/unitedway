@@ -17,11 +17,12 @@
 
 <body>
 	<section id="index" data-role="page">
-	<div align="center" data-role="header">
-      <img src="img/unitedway.png" alt="UnitedWay Logo" />
-      <div data-role="navbar">
-      </div>
-    </div>
+		Hi, Michelle!
+		<div align="center" data-role="header">
+			<img src="../../../static/api/img/unitedway.png" alt="UnitedWay Logo" />
+			<div data-role="navbar">
+			</div>
+		</div>
 
  <nav class="navbar navbar-static-top navbar-default" role="navigation">
         <div class="container">
@@ -59,21 +60,18 @@
         <div class="ui-content" role="main"> 
         
         <div data-demo-html="true" data-mini="true"> -->
-        	{% for u in user %}
         	{% for e in events %}
         	<div class = "container content">
         		<h3>{{e.donation}}</h3><br> <!--suggested donation per user */ -->
         		Based on the events you have attended thus far in 2016, your suggested United Way donation is: <br>
         		<br>
         		<center><h3>$100</h3><br>
-        			Please make your donation here: www.unitedway.com
+        		Please make your donation here: www.unitedway.com
         		</center>
-        	{% endfor %}
         	{% endfor %}
         
         	<div class = "container content">
         		<h3>Most active ISTC Paticipants of 2016</h3>
-                {% for u in user %}
 		<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" >
 			<thead>
 				<tr>
@@ -96,11 +94,9 @@
 			        </tr>                                         
 			    </tbody>
 		    </table>
-                {% endfor %}
 			<br><br>
 		
-		<a href='mailto:cote@ge.com&bcc=212414600@ge.com;212416892@ge.com;212417086@ge.com?subject=Thank You for Attending Our United Way Events&body=Hi,%0AThank you for attending our United Way sponsored event.  Please visit our website at http://unitedway.corporate.ge.com to view results.%0A%0ARegards,%0AUnited Way Champions'>Send Attendees Email</a>
-		<input type="button" value="Send Attendees Email" /><br>
+		<a href='mailto:cote@ge.com&bcc=212414600@ge.com;212416892@ge.com;212417086@ge.com?subject=Thank You for Attending Our United Way Events&body=Hi,%0AThank you for attending our United Way sponsored event.  Please visit our website at http://unitedway.corporate.ge.com to view results.%0A%0ARegards,%0AUnited Way Champions'><input type="button" value="Send Attendees Email" /><br></a>
 		</section>
 	</div>
 	<!-- /footer -->
@@ -108,5 +104,9 @@
 			<h4>&copy; United Way Engagement 2016</h4>
 		</div>
 	</section>
+
+<script type="text/javascript">
+
+</script>
 </body>
 </html>

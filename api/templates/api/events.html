@@ -107,7 +107,8 @@
 								Event Time: {{e.start_time}}<br>
 								Suggested Donation: {{e.suggested_donation}}<br>
 								Event Capacity: {{e.max_capacity}}<br>
-								People RSVPed: {{e.count_joined}} people attended<br><center>
+								People attended: {{e.count_joined}} people attended<br>
+								People RSVP'd: {{e.count_rsvp}} people attended<br><center>
 							</div>
 
 
@@ -153,13 +154,13 @@
 
 							<center>
 								<div class = "container-content" style="display:inline-block">
-									<input type="button" id="button" value = "Yes, I am going!" style= "color:white"  style="height:500px;width:50px" onclick="setColor('button', '#006600')"/>
+									<input type="button" id="button{{e.id}}" value = "Yes, I am going!" style= "color:white"  style="height:500px;width:50px" onclick="rsvp({{e.id}})"/>
 
 									<form style="display:inline-block">
 										<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="showRSVP(rsvp{{e.id}})"/>
 									</form>
 									<form style="display:inline-block">
-										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(attendance{{e.id}})"/>
+										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(attendance{{e.id}}, badgeText{{e.id}})"/>
 									</form> 
 									<form style="display:inline-block">
 										<input type="button" value="Edit" style="height:50px;width:60px" onclick="editEvent(hidden{{e.id}},shown{{e.id}})"/>
@@ -320,6 +321,7 @@ function newUpload(pastevents){
 		            }
 		        }
 		    }
+		
 
 		/*    $(document).ready(function() {
 
@@ -433,9 +435,9 @@ function ltrim(id, eventID) {
 		}
 
 		//displays the form to track attendance
-		function showAttendance(id) {
+		function showAttendance(id, id2) {
 			id.style.display='inherit';
-			Form.fileURL.focus();
+			document.getElementById(id2).focus();
 		}
 
 		function setFocus(id) {
@@ -473,26 +475,32 @@ function ltrim(id, eventID) {
 		    Form.fileURL.focus();
 		  }
 
+		function rsvp(id) {
+			$.ajax({ url: '/rsvp/', type: 'GET', data: {eID: id } }) .done(function(response){ console.log(response); });
+				//alert("Your event has been deleted!");
+            	var property = document.getElementById("button" + id);
+
+            	//alert(property)
+
+                if (property.style.backgroundColor == "#7FFF00"){
+                    property.style.backgroundColor = "#FFFFFF" 
+                      
+                }
+                else{
+                	alert(property.style.backgroundColor)  
+                    property.style.backgroundColor = "#7FFF00"
+                }
+
+            }
+		
+
 		function showRSVP(id) {
 			id.style.display='inherit';
 		    contact.style.display='none';
 		    comment.style.display='none';
 		    Form.fileURL.focus();
 		  }
-
-		 function setColor(btn, color){
-            var count=1;
-            var property = document.getElementById(btn);
-                if (count == 0){
-                    property.style.backgroundColor = "#FFFFFF"
-                    count=1;        
-                }
-                else{
-                    property.style.backgroundColor = "#7FFF00"
-                    count=0;
-                }
-
-                }
+            
 		</script>
 	</body>
 </html>

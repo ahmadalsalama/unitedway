@@ -225,7 +225,7 @@ def rsvp(request):
 				participation.has_rsvpd = False
 			else:
 				participation.has_rsvpd = True
-				participation.save()
+			participation.save()
 		else:
 			query = Participation(user=user, event=event, has_rsvpd=True)
 			query.save()

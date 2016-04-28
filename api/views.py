@@ -14,7 +14,13 @@ USER_TYPES = ((True, 'Organizer'), (False, 'User'))
 
 @csrf_exempt
 def index(request):
-	return render(request,'api/events.html', {'admin': request.user.is_superuser, 'events': getEvents(request, True).values(), 'pastevents': getPastEvents(request, True).values()})
+	try:
+		#if not User.objects.filter(username=request.META['geuid']).exists():
+		#	query = User(username=request.META['geuid'], name=request.META['gefirstname']+" "+request.META['gelastname'], country="U.S.A", is_org=False, email=request.META['gemail'], donations=0)
+		#	query.save()
+		return render(request,'api/events.html', {'admin': request.user.is_superuser, 'events': getEvents(request, True).values(), 'pastevents': getPastEvents(request, True).values()})
+	except Exception as e:
+		return HttpResponse(str(e), status=500)
 
 def update(request):
 	print 'Updating....'
@@ -25,7 +31,7 @@ def update(request):
 def getUsers(request):
 	try:
 		users = {}
-		for user in User.objects.all():
+		for user in User.objects.filter():
 			users[user.username] = {'name':user.name, 'country':user.country, 'org':user.is_org, 'donations':user.donations, 'email':user.email}
 		response = JsonResponse(users, status=200, safe=False)
 		response['access-control-allow-origin'] = '*'
@@ -118,12 +124,11 @@ def addUser(request):
 def addEvent(request):
 	try:
 		org = User.objects.get(username=request.GET['org'])
-		if org.is_org:
-			query = Event(org=org, name=request.GET['name'], description=request.GET['description'], category=0, max_capacity=request.GET['max_capacity'], suggested_donation=request.GET['suggested_donation'], start_date=request.GET['start_date'], end_date=request.GET['start_date'])
-			query.save()
-			response = HttpResponse(True, status=200)
-		else:
-			response = HttpResponse('User is not an organizer.', status=200)
+		org.is_org = True
+		org.save()
+		query = Event(org=org, name=request.GET['name'], description=request.GET['description'], category=0, max_capacity=request.GET['max_capacity'], suggested_donation=request.GET['suggested_donation'], start_date=request.GET['start_date'], end_date=request.GET['start_date'])
+		query.save()
+		response = HttpResponse(True, status=200)
 
 		response['access-control-allow-origin'] = '*'
 		return response
@@ -180,8 +185,12 @@ def deleteEvent(request):
 @csrf_exempt
 def join(request):
 	try:
-		user = User.objects.get(username=request.GET['user'])
-		event = Event.objects.get(id=request.GET['event'])
+		attendee = BadgeDB.objects.get(badgeNumber=request.GET['badgenum'])
+		if not User.objects.filter(username=attendee.username).exists():
+			query = User(username=attendee.username, name=attendee.name, country="U.S.A", is_org=False, email="N/A", donations=0)
+			query.save()
+		user = User.objects.get(username=attendee.username)
+		event = Event.objects.get(id=request.GET['eID'])
 		participation = Participation.objects.filter(user=user, event=event)
 		if len(participation) > 0:
 			participation = participation[0]

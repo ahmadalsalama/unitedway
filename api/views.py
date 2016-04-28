@@ -15,8 +15,8 @@ USER_TYPES = ((True, 'Organizer'), (False, 'User'))
 @csrf_exempt
 def index(request):
 	try:
-		#if not User.objects.filter(username=request.META['geuid']).exists():
-		#	query = User(username=request.META['geuid'], name=request.META['gefirstname']+" "+request.META['gelastname'], country="U.S.A", is_org=False, email=request.META['gemail'], donations=0)
+		#if not User.objects.filter(username=str(request.META['geuid'])).exists():
+		#	query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", is_org=False, email=str(request.META['gemail']), donations=0)
 		#	query.save()
 		return render(request,'api/events.html', {'admin': request.user.is_superuser, 'events': getEvents(request, True).values(), 'pastevents': getPastEvents(request, True).values()})
 	except Exception as e:
@@ -27,6 +27,9 @@ def update(request):
 	response = JsonResponse({'events': getEvents(request, True).values()}, status=200, safe=False)
 	response['access-control-allow-origin'] = '*'
 	return response
+
+def getAnnualStats(request):
+	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'events': getEvents(request, True).values()})
 
 def getUsers(request):
 	try:

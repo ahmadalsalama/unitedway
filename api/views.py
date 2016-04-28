@@ -213,8 +213,7 @@ def join(request):
 def rsvp(request):
 	try:
 		if not User.objects.filter(username=str(request.META['geuid'])).exists():
-			query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", i\
-s_org=False, email=str(request.META['gemail']), donations=0)
+			query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", is_org=False, email=str(request.META['gemail']), donations=0)
 			query.save()
 
 		user = User.objects.get(username=str(request.META['geuid']))

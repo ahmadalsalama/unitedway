@@ -18,7 +18,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
 </head>
 
-<body onload ="newUpload('{{events}}');">
+<body onload ="newUpload();">
 
 	<!-- Standard Page Header and Navigation-->
 	<section id="index" data-role="page">
@@ -265,8 +265,8 @@
 
 // Function for importing drinks CSV
 
-function newUpload(pastevents){
-	//alert("hi!");
+function newUpload(){
+	alert("hi!");
 	console.debug(pastevents);
 	//json.pasre(pastevents);
 	document.getElementById('txtFileUpload').addEventListener('change', upload, false);
@@ -387,7 +387,7 @@ function ltrim(id, eventID) {
 				  console.log(decString);
 				  alert(decString + "   " + eventID);
 
-				  $.ajax({ url: '/add/attendee/', type: 'GET', data: {badgenum: decString, eID: eventID} }) .done(function(response){ console.log(response); });
+				  $.ajax({ url: '/join/', type: 'GET', data: {badgenum: decString, eID: eventID} }) .done(function(response){ console.log(response); });
 
 				//make call to input in DB *Ahmad
 				// LIKE: inputToDB(decString, eventID)

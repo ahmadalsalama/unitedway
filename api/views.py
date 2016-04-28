@@ -208,8 +208,31 @@ def join(request):
 
 @csrf_exempt
 def rsvp(request):
-	return HttpResponse(request.META['geuid'], status=200)
-	
+	try:
+		if not User.objects.filter(username=request.META['geuid']).exists():
+			query = User(username=request.META['geuid'], name=request.META['gefirstname']+" "+request.META['gelastname'], country="U.S.A", is_org=False, email=request.META['gemail'], donations=0)
+			query.save()
+		
+		user = User.objects.get(username=request.META['geuid'])
+		event = Event.objects.get(id=request.GET['eID'])
+		participation = Participation.objects.filter(user=user, event=event)
+		if len(participation) > 0:
+			participation = participation[0]
+			if participation.has_rsvpd:
+				participation.has_rsvpd = False
+			else:
+				participation.has_rsvpd = True
+			participation.save()
+		else:
+			query = Participation(user=user, event=event, has_rsvpd=True)
+			query.save()
+		response = HttpResponse(True, status=200)
+		response['access-control-allow-origin'] = '*'
+		update(request)
+		return response
+	except Exception as e:
+		return HttpResponse(str(e), status=500)
+		
 def addcomment(request, eventID):
 	try:
 		'''

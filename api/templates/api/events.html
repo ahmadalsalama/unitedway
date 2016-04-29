@@ -429,7 +429,7 @@ function newUpload(id){
 		    			data = $.csv.toArrays(csvData, options);
 		                    //console.debug(data);
 		                    if (data && data.length > 0) {
-		                    	alert(+ data[0].length + ' drinks uploaded successfully! ');
+		                    	alert(+ (data[0].length - 1) + ' drinks uploaded successfully! ');
 		                    } else {
 		                    	alert('No data to import!');
 		                    }
@@ -445,9 +445,6 @@ function newUpload(id){
 		                       var decString = parseInt(leftString, 16);
 		                       drinkArray[i] = decString;
 		                       //console.log(decString);
-
-
-		                       
 
 		                        //console.debug(data[0][i]);
 		                    }

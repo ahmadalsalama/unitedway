@@ -261,7 +261,7 @@ def uploadDrinks(request):
 		responsearray = ""
 		for u in drinks_array:
 			drinker = BadgeDB.objects.get(badgeNumber=str(u))
-			user = User.objects.filter(username=drinker.username)
+			user = User.objects.get(username=drinker.username)
 			user.num_drinks = user.num_drinks + 1
 			user.save()
 			responsearray = responsearray + " " + str(drinker.username) + " " + str(user.num_drinks)

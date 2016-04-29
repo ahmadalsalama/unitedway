@@ -198,15 +198,18 @@
 											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
 												<thead>
 													<tr>
-														<th>People Going!</th>
-
+														<th>Attendee</th>
+														<th>Email</th>
 													</tr>
 												</thead>
+												{% for u in e.rsvpd %}
 												<tbody>
 													<tr>
-														<td>{{participation.user}}</td>
+														<td>{{u.name}}</td>
+														<td>{{u.email}}</td>
 													</tr>                                         
 												</tbody>
+												{% endfor %}
 											</table>
 											<br><br></center>
 										
@@ -214,18 +217,22 @@
 
 					<div id="attended{{e.id}}" style="display:none"><br><center>
 										Participants that have attended:<br>
-											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+											<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
 												<thead>
 													<tr>
-														<th>People that attended the event.</th>
+														<th>Attendee</th>
+														<th>Email</th>
 
 													</tr>
 												</thead>
+												{% for u in e.joined %}
 												<tbody>
 													<tr>
-														<td>{{participation.user}}</td>
+														<td>{{u.name}}</td>
+														<td>{{u.email}}</td>
 													</tr>                                         
 												</tbody>
+												{% endfor %}
 											</table>
 											<br><br></center>
 										

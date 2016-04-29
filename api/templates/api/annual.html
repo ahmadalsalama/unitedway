@@ -65,6 +65,11 @@
         		Based on the events you have attended thus far in 2016, your suggested United Way donation is: <br>
         		<!-- display annual donation {{user.donations}}-->
         		<br><h3>{{my_sum}}</h3><br>
+				
+				{% for a in all_attendees %}
+					<br><h3>{{a.count}} {{a.total}}</h3><br>
+				{% endfor %}
+				
         		Please make your donation here: www.unitedway.com
         		</center>
 

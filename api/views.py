@@ -30,8 +30,8 @@ def update(request):
 	return response
 
 def getAnnualStats(request):
-	#mysum = getUserEventsStats(request, str(request.META['geuid']))[1]
-	mysum = getUserEventsStats(request, "212447934")[1]
+	mysum = getUserEventsStats(request, str(request.META['geuid']))[1]
+	#mysum = getUserEventsStats(request, "212447934")[1]
 	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'my_sum': mysum, 'all_attendees': getAllUserEventsStats(request).values()})
 
 def getUsers(request):

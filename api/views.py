@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
 import json
+from operator import itemgetter
 
 CATEGORY_CHOICES = ((0, 'Health'), (1, 'Fitness'), (2, 'Social'))
 STATUS_CHOICES = ((0, 'Open'), (1, 'Accepted'), (2, 'Declined'))
@@ -52,7 +53,7 @@ def getEvents(request, index=False):
 			count_joined = len(Participation.objects.filter(event=event, has_joined=True))
 			count_rsvpd = len(Participation.objects.filter(event=event, has_rsvpd=True))
 			canEdit = canEdit or str(request.META['geuid']) == str(event.org.username)
-			events[event.id] = {'id':event.id, 'canEdit':canEdit, 'name':event.name, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
+			events[event.id] = {'id':event.id, 'canEdit':canEdit, 'name':event.name, 'suggested_donation':event.suggested_donation, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
 			#events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description, 'category':dict(CATEGORY_CHOICES)[event.category], 'start_date':event.start_date.strftime("%d-%m-%Y"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'org':event.org.name, 'count_liked':count_liked, 'count_joined':count_joined}
 		if index:
 			return events
@@ -68,7 +69,7 @@ def getPastEvents(request, index=False):
 		for event in Event.objects.exclude(start_date__gte=datetime.today()):
 			count_joined = len(Participation.objects.filter(event=event, has_joined=True))
 			count_rsvpd = len(Participation.objects.filter(event=event, has_rsvpd=True))
-			events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
+			events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description,'max_capacity':event.max_capacity, 'suggested_donation':event.suggested_donation, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
 		if index:
 			return events
 		response = JsonResponse(events, status=200, safe=False)
@@ -114,12 +115,11 @@ def getUserEventsStats(request, username):
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
 
-
 def getAllUserEventsStats(request):
 	try:		
 		result = {}
 		for usr in User.objects.all():
-			print usr.username
+			#print usr.username
 			total = 0
 			count = 0
 			u_events = Participation.objects.filter(user=usr)
@@ -127,11 +127,23 @@ def getAllUserEventsStats(request):
 				if u.has_joined:
 					total+= u.event.suggested_donation
 					count+=1
-			result[usr.username] = {'name':usr.name, 'sso':usr.username, 'count':count, 'total':total}
-		return result
+			result[usr.username] = {'name':usr.name, 'sso':usr.username, 'count':int(count), 'total':total}
+			
+		#print result
+		newlist = sorted(result.iteritems(), key=lambda (x, y): y['count'], reverse=True)
+		usercount = 1
+		sortedTopTenResults = {}
+		for (item, value) in newlist:
+			if usercount >= 11:
+				break
+			newvalue = value
+			newvalue['rank'] = usercount
+			sortedTopTenResults[usercount] = newvalue
+			print newvalue
+			usercount+=1
+		return sortedTopTenResults
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
-
 
 def getEventParticipations(request):
 	try:

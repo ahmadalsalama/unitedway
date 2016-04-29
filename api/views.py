@@ -254,6 +254,20 @@ def updateEvent(request):
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
 
+@login_required(login_url='/admin/login/')
+def uploadDrinks(request):
+	try:
+		drinks_array = json.loads(request.GET['drinkArray'])
+		for u in drinks_array:
+			drinker = BadgeDB.objects.get(badgeNumber=str(u))
+			user = User.objects.filter(username=drinker.username)
+			user.num_drinks = user.num_drinks + 1
+			user.save()
+		response = HttpResponse(True, status=200)
+		response['access-control-allow-origin'] = '*'
+		return response
+	except Exception as e:
+		return HttpResponse(str(e), status=500)
 
 @csrf_exempt
 @login_required(login_url='/admin/login/')

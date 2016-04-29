@@ -31,10 +31,10 @@
 				<div class="navbar-header">
 					<a class="navbar-brand"><span class="ge-logo"></span> 
 					{% if admin %}
-						<span>Welcome to the United Way Admin Portal, Michelle!</span>
+						<span>Welcome to the United Way Admin Portal, {{current_user}}!</span>
 					{% endif %}
 					{% if not admin %}
-						<span>Welcome to the United Way Engagement Portal, Michelle!</span>
+						<span>Welcome to the United Way Engagement Portal, {{current_user}}!</span>
 					{% endif %}	</a>
 				</div>
 			</div>

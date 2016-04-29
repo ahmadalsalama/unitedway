@@ -29,6 +29,7 @@ def update(request):
 	return response
 
 def getAnnualStats(request):
+	
 	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'events': getEvents(request, True).values()})
 
 def getUsers(request):
@@ -49,6 +50,7 @@ def getEvents(request, index=False):
 		for event in Event.objects.filter(start_date__gte=datetime.today()):
 			count_joined = len(Participation.objects.filter(event=event, has_joined=True))
 			count_rsvpd = len(Participation.objects.filter(event=event, has_rsvpd=True))
+			canEdit = canEdit or str(request.META['geuid']) == str(event.org.username)
 			events[event.id] = {'id':event.id, 'canEdit':canEdit, 'name':event.name, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
 			#events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description, 'category':dict(CATEGORY_CHOICES)[event.category], 'start_date':event.start_date.strftime("%d-%m-%Y"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'org':event.org.name, 'count_liked':count_liked, 'count_joined':count_joined}
 		if index:

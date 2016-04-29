@@ -152,8 +152,10 @@
 							<!--allow organizer to edit event-->
 
 							<center>
-								<div class = "container-content" style="display:inline-block">
-									<input type="button" id="button{{e.id}}" value = "RSVP (Toggle)" style= "color:white"  style="height:500px;width:50px" onclick="rsvp({{e.id}})"/>
+
+										<input type="button" id="button{{e.id}}" value = "RSVP (Toggle)" color="#FFFFFF"style= "color:white"  style="height:500px;width:50px" onclick="rsvp({{e.id}})"/></center>
+
+								<div class = "container-content" style="display:inline-block"><center>
 
 									<form style="display:inline-block">
 										<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="showRSVP(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
@@ -164,30 +166,24 @@
 									<form style="display:inline-block">
 										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}}, 'badgeText{{e.id}}')"/>
 									</form> 
-
-									{% if canEdit %}
+									{% if e.canEdit %}
 									<form style="display:inline-block">
 										<input type="button" value="Edit" style="height:50px;width:60px" onclick="editEvent(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
 									</form> 
 									{% endif %}
 									<form style="display:inline-block">
 										<input type="button" value="Delete" style="height:50px;width:80px" onclick="confirmDelete({{e.id}})"/>
-									</form><br>
-								</div>
-				<!--
-						<form style="display:inline-block">
-							<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact(contact{{e.id}},attended{{e.id}})"/>
-						</form>-->
+									</form>
+									<form style="display:inline-block">
+										<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
+									</form>
 
-						<form style="display:inline-block">
-							<input type="button" value="Contact" style="height:30px;width:50px" onclick="showContact(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
-						</form>
+									<form style="display:inline-block">
+										<input type="button" value="Comment" style="height:30px;width:50px" onclick="showCommentBox(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})", />
+									</form>
+								</center>
+							</div>
 
-						<form style="display:inline-block">
-							<input type="button" value="Comment" style="height:30px;width:50px" onclick="showCommentBox(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})", />
-						</form>
-						</center>
-						
 
 						<div id="comment{{e.id}}" style="display:none"><br>
 							Comments, Questions, or Concerns:<br>
@@ -268,12 +264,83 @@
 									People RSVPed: {{e.count_rsvpd}} number of people rsvpd<br><center>
 									People Attended: {{e.count_joined}} number of people attended<br>
 									<!--still need show comments, if show actual attended people, only admin-->
-									{% if admin %}
-									<input type="file" name="File Upload" id="txtFileUpload{{e.id}}" accept=".csv" style = "display:inherit"/>
-									<form style="display:inline-block">
-										<button type="edit" class="btn-mini" style="height:30px;width:50px" onclick="confirmDelete({{e.id}})">Delete</button></center>
-									</form>
-										{% endif %}
+
+									<div class = "container-content" style="display:inline-block"><center>
+
+										<form style="display:inline-block">
+											<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="pShowRSVP(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
+										</form>
+										<form style="display:inline-block">
+											<input type="button" value="{{e.count_join}} + Attended" style="height:30px;width:50px"                                                            onclick="pShowAttend(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
+										</form>
+										<form style="display:inline-block">
+											<input type="button" value="Delete" style="height:50px;width:80px" onclick="confirmDelete({{e.id}})"/>
+										</form>
+										<form style="display:inline-block">
+											<input type="button" value="Contact" style="height:30px;width:50px" onclick="pShowContact(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
+										</form>
+
+										<form style="display:inline-block">
+											<input type="button" value="Comment" style="height:30px;width:50px" onclick="pShowCommentBox(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})", />
+										</form>
+									</center>
+								</div>
+
+								{% if admin %}
+								<input type="file" name="File Upload" id="txtFileUpload{{e.id}}" accept=".csv" style = "display:inherit"/>
+								{% endif %}
+
+							<div id="pComment{{e.id}}" style="display:none"><br>
+								Comments, Questions, or Concerns:<br>
+								<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
+								<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
+							</div>
+
+							<div id="pContact{{e.id}}" style="display:none"><br></center>
+								<address>
+									<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
+								</address>
+							</div>
+
+							<div id="pRsvp{{e.id}}" style="display:none"><br><center>
+										Participants that have RSVP'd:<br>
+											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+												<thead>
+													<tr>
+														<th>People Going!</th>
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{participation.user}}</td>
+													</tr>                                         
+												</tbody>
+											</table>
+											<br><br></center>
+							</div>
+										
+					
+
+					<div id="pAttended{{e.id}}" style="display:none"><br><center>
+										Participants that have attended:<br>
+											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+												<thead>
+													<tr>
+														<th>People that attended the event.</th>
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{participation.user}}</td>
+													</tr>                                         
+												</tbody>
+											</table>
+											<br><br></center>
+										
+					</div>
+									
 									</div>
 								</div>
 								{% endfor %}
@@ -530,8 +597,9 @@ function ltrim(id, eventID) {
             	var property = document.getElementById("button" + id);
 
             	//alert(property)
+            	//console.log(property.style.backgroundColor);
 
-                if (property.style.backgroundColor == "#7FFF00"){
+                if (property.style.backgroundColor == "rgb(127, 255, 0)"){
                     property.style.backgroundColor = "#FFFFFF" 
                       
                 }
@@ -539,7 +607,7 @@ function ltrim(id, eventID) {
                 	//alert(property.style.backgroundColor)  
                     property.style.backgroundColor = "#7FFF00"
                 }
-                alert(aID);
+                //alert(aID);
             
 
             }
@@ -566,6 +634,39 @@ function ltrim(id, eventID) {
 		    attendanceID.style.display='none';
 		    Form.fileURL.focus();
 		  }
+
+	//functions for past events
+	function pShowRSVP(commentID, aID, contactID, rsvpID) {
+		    commentID.style.display='none';
+		    aID.style.display='none';
+		    contactID.style.display='none';
+		    rsvpID.style.display='inherit';
+		    Form.fileURL.focus();
+		  }
+
+	 function pShowAttend(commentID, aID, contactID, rsvpID) {
+	    commentID.style.display='none';
+	    aID.style.display='inherit';
+	    contactID.style.display='none';
+	    rsvpID.style.display='none';
+	    Form.fileURL.focus();
+	  }
+
+	function pShowCommentBox(commentID, aID, contactID, rsvpID) {
+	    commentID.style.display='inherit';
+	    aID.style.display='none';
+	    contactID.style.display='none';
+	    rsvpID.style.display='none';
+	    Form.fileURL.focus();
+	  }
+
+	function pShowContact(commentID, aID, contactID, rsvpID) {
+	    commentID.style.display='none';
+	    aID.style.display='none';
+	    contactID.style.display='inherit';
+	    rsvpID.style.display='none';
+	    Form.fileURL.focus();
+	  }
             
 		</script>
 	</body>

@@ -31,11 +31,11 @@
 				<div class="navbar-header">
 					<a class="navbar-brand"><span class="ge-logo"></span> 
 					{% if admin %}
-						<span>Welcome to the United Way Admin Portal, Michelle!</span></a>
+						<span>Welcome to the United Way Admin Portal, Michelle!</span>
 					{% endif %}
 					{% if not admin %}
 						<span>Welcome to the United Way Engagement Portal, Michelle!</span>
-					{% endif %}</br>	
+					{% endif %}	</a>
 				</div>
 			</div>
 		</nav>
@@ -261,8 +261,8 @@
 									Event Date: {{e.start_date}}<br>
 									Event Time: {{e.start_time}}<br>
 									Event Capacity: {{e.max_capacity}}<br>
-									People RSVPed: {{e.count_rsvpd}} number of people rsvpd<br>
-									People Attended: {{e.count_joined}} number of people attended<br>
+									People Attended: {{e.count_joined}} people attended<br>
+									People RSVPed: {{e.count_rsvpd}} people RSVP'd<br>
 									<!--still need show comments, if show actual attended people, only admin-->
 									<center>
 
@@ -404,7 +404,7 @@ function newUpload(id){
 		                    var jsonArray = JSON.stringify(drinkArray);
 		                    console.log(jsonArray);
 		                    //ajax
-		                       //$.ajax({ url: '/join/', type: 'GET', data: {badgenum: decString, eID: id} }) .done(function(response){ console.log(response); });
+		                       //$.ajax({ url: '/join/', type: 'GET', data: {drinkArray: jsonArray, eID: id} }) .done(function(response){ console.log(response); });
 		                };
 		                reader.onerror = function() {
 		                	alert('Unable to read ' + file.fileName);
@@ -467,7 +467,18 @@ function ltrim(id, eventID) {
 	      var eTime = document.getElementById("time" + id).value;
 	      var eDonation = document.getElementById("donation" + id).value;
 	      var eCapacity = document.getElementById("capacity" + id).value;
-	      $.ajax({ url: '/update/event/', type: 'GET', data: {eventID: id, org_username: eSSO, name: eName, description: eDescription, max_capacity: eCapacity, start_date: eDate + '-' + eTime, suggested_donation: eDonation } }) .done(function(response){ console.log(response); });
+	      $.ajax({ url: '/update/event/', type: 'GET', data: {eventID: id, org_username: eSSO, name: eName, description: eDescription, max_capacity: eCapacity, start_date: eDate + '-' + eTime, suggested_donation: eDonation } }) .done(function(response){
+	      		 	console.log(response); 
+	      		 	if (response){
+	      			document.getElementById("shown"+id).value = 
+	      						("Event Name: " +eName + "<br>" +
+								"Event Coordinator: " +eSSO+ "<br>" +
+								"Event Description: "+eDescription+"<br>" +
+								"Event Date: "+eDate+"<br>" +
+								"Event Time: "+eTime+"<br>" +
+								"Event Capacity: "+eCapacity);
+					}
+	      		});
 			alert("Your event has been updated!");
 			//refresh/update section
 		}

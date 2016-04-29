@@ -28,11 +28,11 @@
             <div class="navbar-header">
               <a class="navbar-brand"><span class="ge-logo"></span> 
 					{% if admin %}
-						<span>Welcome to the United Way Admin Portal, Michelle!</span></a>
+						<span>Welcome to the United Way Admin Portal, Michelle!</span>
 					{% endif %}
 					{% if not admin %}
 						<span>Welcome to the United Way Engagement Portal, Michelle!</span>
-					{% endif %}</br>			
+					{% endif %}	</a>
             </div>
         </div>
     </nav>
@@ -61,21 +61,18 @@
         <div data-demo-html="true" data-mini="true"> -->
         	
         	<div class = "container content">
-        		 <!--suggested donation per user */ -->
-        		Based on the events you have attended thus far in 2016, your suggested United Way donation is: <br>
-        		<!-- display annual donation {{user.donations}}-->
-        		<br><h3>{{my_sum}}</h3><br>
-				
-				{% for a in all_attendees %}
-					<br><h3>{{a.name}} {{a.count}} {{a.total}}</h3><br>
-				{% endfor %}
-				
-        		Please make your donation here: www.unitedway.com
-        		</center>
+        		Based on the events you have attended this year (and your alcohol consumtion!), your suggested United Way donation is: <br>
+        		<center>
+        		<br><h3><b>${{my_sum}}</b></h3><br>
 
+
+        		<a href="www.pledge.ge.com">Please make your donation at pledge.ge.com</a>
+        		</center>
+        		
         	<div class = "container content">
         		<h3>Most active ISTC Paticipants of 2016</h3>
-		<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" >
+
+		<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke" >
 			<thead>
 				<tr>
 		            <th data-priority="2">Rank</th>
@@ -86,9 +83,10 @@
 		            {% endif %}
 			    </tr>
 		    </thead>
+		    {% for a in all_attendees %}
 			    <tbody>
 			        <tr>
-				        <th>1</th>
+				        <th>{{a.rank}}</th>
 				        <td>{{a.name}}</td>
 				        <td>{{a.count}}</td>
 				        {% if admin %}
@@ -96,7 +94,9 @@
 				        {% endif %}         
 			        </tr>                                         
 			    </tbody>
+			    {% endfor %}
 		    </table>
+		    
 			<br><br>
 		
 		<a href='mailto:cote@ge.com&bcc=212414600@ge.com;212416892@ge.com;212417086@ge.com?subject=Thank You for Attending Our United Way Events&body=Hi,%0AThank you for attending our United Way sponsored event.  Please visit our website at http://unitedway.corporate.ge.com to view results.%0A%0ARegards,%0AUnited Way Champions'><input type="button" value="Send Attendees Email" /><br></a>

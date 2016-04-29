@@ -183,6 +183,23 @@
 
 
 						<div id="comment{{e.id}}" style="display:none"><br>
+							Comments:<br>
+												{% for c in comments %}
+												<tbody>
+													<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
+													<tr>
+														<td>
+															<b>{{c.name}}:<b><br>
+															{{c.message}}<br>
+															{{c.dateTime}}<br>
+
+														</td>
+													</tr>
+													</table>                                       
+												</tbody>
+
+												{% endfor %}
+											<br><br></center>
 							Comments, Questions, or Concerns:<br>
 							<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
 							<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
@@ -198,7 +215,7 @@
 											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
 												<thead>
 													<tr>
-														<th>Attendee</th>
+														<th>RSVP:</th>
 													</tr>
 												</thead>
 												{% for u in e.rsvpdlist %}
@@ -233,20 +250,7 @@
 											<br><br></center>
 										
 					</div>
-					<!--
-					<div id="comments{{e.id}}" style="display:none"><br><center>
-										Comments:<br>
-											
-												{% for c in comments %}
-
-												{{c.name}}<br>
-												{{c.message}}<br>
-												{{c.dateTime}}<br>
-
-												{% endfor %}
-											<br><br></center>
-										
-					</div>-->
+					
 										<div id="attendance{{e.id}}" style="display:none"><br><center>
 											<label>Participant Badge Number: </label>
 											<form style="display:inline-block">
@@ -312,6 +316,23 @@
 											<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
 									</div>
 									<div id="pComment{{e.id}}" style="display:none"><br>
+										Comments:<br>
+												{% for c in comments %}
+												<tbody>
+													<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
+													<tr>
+														<td>
+															<b>{{c.name}}:<b><br>
+															{{c.message}}<br>
+															{{c.dateTime}}<br>
+
+														</td>
+													</tr>
+													</table>                                       
+												</tbody>
+
+												{% endfor %}
+											<br><br></center>
 										Comments, Questions, or Concerns:<br>
 										<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
 										<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
@@ -320,27 +341,40 @@
 									<div id="pRsvp{{e.id}}" style="display:none"><br><center>
 										Participants that have RSVP'd:<br>
 										<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
-											<thead>
-												<tr><th>People Going!</th></tr>
-											</thead>
-											<tbody>
-												<tr><td>{{participation.user}}</td></tr>                                         
-											</tbody>
-										</table>
-										<br><br></center>
+												<thead>
+													<tr>
+														<th>RSVP:</th>
+													</tr>
+												</thead>
+												{% for u in e.rsvpdlist %}
+												<tbody>
+													<tr>
+														<td>{{u}}</td>
+													</tr>                                         
+												</tbody>
+												{% endfor %}
+											</table>
+											<br><br></center>
 									</div>
 
 									<div id="pAttended{{e.id}}" style="display:none"><br><center>
 										Participants that have attended:<br>
-										<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
-											<thead>
-												<tr><th>People that attended the event.</th></tr>
-											</thead>
-											<tbody>
-												<tr><td>{{participation.user}}</td></tr>                                         
-											</tbody>
-										</table>
-										<br><br></center>
+										<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
+												<thead>
+													<tr>
+														<th>Attendee</th>
+
+													</tr>
+												</thead>
+												{% for u in e.joinedlist %}
+												<tbody>
+													<tr>
+														<td>{{u}}</td>
+													</tr>                                         
+												</tbody>
+												{% endfor %}
+											</table>
+											<br><br></center>
 									</div>
 					
 				</div>
@@ -420,7 +454,7 @@ function newUpload(id){
 		                    var jsonArray = JSON.stringify(drinkArray);
 		                    console.log(jsonArray);
 		                    //ajax
-		                       //$.ajax({ url: '/join/', type: 'GET', data: {drinkArray: jsonArray, eID: id} }) .done(function(response){ console.log(response); });
+		                       //$.ajax({ url: '/upload/drinks', type: 'GET', data: {drinkArray: jsonArray, eID: id} }) .done(function(response){ console.log(response); });
 		                };
 		                reader.onerror = function() {
 		                	alert('Unable to read ' + file.fileName);
@@ -466,7 +500,7 @@ function ltrim(id, eventID) {
 			}
 		}
 
-/*
+/*\
 		function addComment(){
 		// to do tomorrow
 		alert("Your comment has been added!");

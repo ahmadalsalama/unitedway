@@ -23,10 +23,7 @@
 	<!-- Standard Page Header and Navigation-->
 	<section id="index" data-role="page">
 		<div align="center" data-role="header">
-			
 			<img src="../../../static/api/img/unitedway.png" alt="UnitedWay Logo" />
-			<div data-role="navbar">
-			</div>
 		</div>
 
 		<nav class="navbar navbar-static-top navbar-default" role="navigation">
@@ -264,12 +261,13 @@
 									Event Date: {{e.start_date}}<br>
 									Event Time: {{e.start_time}}<br>
 									Event Capacity: {{e.max_capacity}}<br>
-									People RSVPed: {{e.count_rsvpd}} number of people rsvpd<br><center>
+									People RSVPed: {{e.count_rsvpd}} number of people rsvpd<br>
 									People Attended: {{e.count_joined}} number of people attended<br>
 									<!--still need show comments, if show actual attended people, only admin-->
+									<center>
 
 									<div class = "container-content" style="display:inline-block">
-										<center>
+										
 											<form style="display:inline-block">
 												<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="pShowRSVP(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
 											</form>
@@ -286,24 +284,20 @@
 											<form style="display:inline-block">
 												<input type="button" value="Comment" style="height:30px;width:50px" onclick="pShowCommentBox(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})", />
 											</form>
-										</center>
+										
 									</div>
-
+									</center>
 
 									{% if admin %}
 									<input type="file" name="File Upload" id="txtFileUpload{{e.id}}" accept=".csv" style = "display:inherit"/>
 									{% endif %}
-
+									<div id="pContact{{e.id}}" style="display:none"><br>
+											<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
+									</div>
 									<div id="pComment{{e.id}}" style="display:none"><br>
 										Comments, Questions, or Concerns:<br>
 										<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
 										<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
-									</div>
-
-									<div id="pContact{{e.id}}" style="display:none"><br></center>
-										
-											<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
-										
 									</div>
 
 									<div id="pRsvp{{e.id}}" style="display:none"><br><center>
@@ -334,8 +328,12 @@
 					
 				</div>
 			</div>
-						{% endfor %}
-						{% endif %}
+							{% endfor %}
+							{% endif %}
+						
+	</div>
+</div>
+
 
 							<div data-role="footer">
 								<h4>&copy; GE United Way!</h4>
@@ -352,7 +350,7 @@ function newUpload(id){
 	//alert("hi!");
 	//console.debug({{pastevents}}[0]);
 	//json.pasre(pastevents);
-	console.log(id);
+	//console.log(id);
 	document.getElementById('txtFileUpload' + id).addEventListener('change', upload, false);
 			
 
@@ -370,6 +368,7 @@ function newUpload(id){
 		    	if (!browserSupportFileUpload()) {
 		    		alert('The File APIs are not fully supported in this browser!');
 		    	} else {
+		    		//console.log(id);
 		    		var data = null;
 		    		var file = evt.target.files[0];
 		    		var reader = new FileReader();
@@ -385,6 +384,7 @@ function newUpload(id){
 		                    	alert('No data to import!');
 		                    }
 
+		                    var drinkArray = [(data[0].length - 1)];
 		                    for (var i = 0; i < data[0].length - 1; i++) {
 		                    	var str = data[0][i];
 		                    	var chr = '15E0'
@@ -393,10 +393,18 @@ function newUpload(id){
 		                        //console.log(str);
 		                       // console.log(leftString);
 		                       var decString = parseInt(leftString, 16);
-		                       console.log(decString);
+		                       drinkArray[i] = decString;
+		                       //console.log(decString);
+
+
+		                       
 
 		                        //console.debug(data[0][i]);
 		                    }
+		                    var jsonArray = JSON.stringify(drinkArray);
+		                    console.log(jsonArray);
+		                    //ajax
+		                       //$.ajax({ url: '/join/', type: 'GET', data: {badgenum: decString, eID: id} }) .done(function(response){ console.log(response); });
 		                };
 		                reader.onerror = function() {
 		                	alert('Unable to read ' + file.fileName);

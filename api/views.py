@@ -32,7 +32,7 @@ def update(request):
 def getAnnualStats(request):
 	mysum = getUserEventsStats(request, str(request.META['geuid']))[1]
 	#mysum = getUserEventsStats(request, "212447934")[1]
-	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'my_sum': mysum, 'all_attendees': getAllUserEventsStats(request).values()})
+	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'my_sum': mysum, 'all_attendees': getAllUserEventsStats(request).values(), 'all_sso': getAllUserSSOs(request).value()})
 
 def getUsers(request):
 	try:
@@ -144,6 +144,24 @@ def getAllUserEventsStats(request):
 		return sortedTopTenResults
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
+
+def getAllUserSSOs(request):
+	try:		
+		result = {}
+		for usr in User.objects.all():
+			#print usr.username
+			total = 0
+			count = 0
+			u_events = Participation.objects.filter(user=usr)
+			for u in u_events:
+				if u.has_joined:
+					total+= u.event.suggested_donation
+					count+=1
+			result[usr.username] = {'name':usr.name, 'sso':usr.username, 'count':count, 'total':total}
+		return result
+	except Exception as e:
+		return HttpResponse(str(e), status=500)
+
 
 def getEventParticipations(request):
 	try:

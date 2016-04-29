@@ -190,7 +190,7 @@
 
 						<div id="contact{{e.id}}" style="display:none"><br></center>
 							<address>
-								<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
+								<a href="mailto:{{e.org_username}}@ge.com">{{e.org_name}}</a><br> 
 							</address>
 						</div>
 						<div id="rsvp{{e.id}}" style="display:none"><br><center>
@@ -199,14 +199,13 @@
 												<thead>
 													<tr>
 														<th>Attendee</th>
-														<th>Email</th>
 													</tr>
 												</thead>
-												{% for u in e.rsvpd %}
+												{% for u in e.rsvpdlist %}
 												<tbody>
 													<tr>
-														<td>{{u.name}}</td>
-														<td>{{u.email}}</td>
+														<td>{{u}}</td>
+														<!--<td>{{u.email}}</td>-->
 													</tr>                                         
 												</tbody>
 												{% endfor %}
@@ -221,19 +220,30 @@
 												<thead>
 													<tr>
 														<th>Attendee</th>
-														<th>Email</th>
 
 													</tr>
 												</thead>
-												{% for u in e.joined %}
+												{% for u in e.joinedlist %}
 												<tbody>
 													<tr>
-														<td>{{u.name}}</td>
-														<td>{{u.email}}</td>
+														<td>{{u}}</td>
 													</tr>                                         
 												</tbody>
 												{% endfor %}
 											</table>
+											<br><br></center>
+										
+					</div>
+					<div id="comments{{e.id}}" style="display:none"><br><center>
+										Comments:<br>
+											
+												{% for c in comments %}
+
+												{{c.name}}<br>
+												{{c.message}}<br>
+												{{c.dateTime}}<br>
+
+												{% endfor %}
 											<br><br></center>
 										
 					</div>

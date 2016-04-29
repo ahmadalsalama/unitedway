@@ -204,7 +204,7 @@
 											<br><br></center>
 							Comments, Questions, or Concerns:<br>
 							<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
-							<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
+							<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}},{{current_user}})">
 						</div>
 
 						<div id="contact{{e.id}}" style="display:none"><br></center>
@@ -337,7 +337,7 @@
 											<br><br></center>
 										Comments, Questions, or Concerns:<br>
 										<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
-										<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
+										<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}},{{current_user}})">
 									</div>
 
 									<div id="pRsvp{{e.id}}" style="display:none"><br><center>
@@ -501,14 +501,23 @@ function ltrim(id, eventID) {
 			}
 		}
 
-/*
-		function addComment(){
+
+		function addComment(id, user){
+	      var commentText = document.getElementById(id).value;
+	      var currentdate = new Date(); 
+		  var dateTime = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
 		// to do tomorrow
 		alert("Your comment has been added!");
-		$.ajax({ url: '/comment/event/', type: 'GET', data: {name: eName, comment: commentText,, start_date: eDate + '-' + eTime} }) .done(function(response){ console.log(response); });
+		$.ajax({ url: '/comment/event/', type: 'GET', data: {name: user, comment: commentText, timeStamp: dateTime} }) .done(function(response){ console.log(response); });
 
 		}
-*/
+
 		//updates event in events table
 		function confirmUpdate(id) {
 		  var eName = document.getElementById("name" + id).value;

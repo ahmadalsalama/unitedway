@@ -29,8 +29,8 @@ def update(request):
 	return response
 
 def getAnnualStats(request):
-	
-	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'events': getEvents(request, True).values()})
+	mysum = getUserEventsStats(request, str(request.META['geuid']))[1]
+	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'my_sum': mysum})
 
 def getUsers(request):
 	try:
@@ -87,8 +87,9 @@ def getUser(request, username):
 
 def getUserEvents(request, username):
 	try:
+		user = User.objects.get(username=username)
 		events = {}
-		u_events = Participation.objects.filter(user=username).order_by('-created')
+		u_events = Participation.objects.filter(user=user).order_by('-created')
 		for u in u_events:
 			events[u.id] = {'has_joined':u.has_joined, 'has_rsvpd':u.has_rsvpd, 'event':u.event.id}
 		response = JsonResponse(events, status=200, safe=False)
@@ -96,6 +97,24 @@ def getUserEvents(request, username):
 		return response
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
+
+def getUserEventsStats(request, username):
+	try:
+		total = 0
+		count = 0
+		user = User.objects.get(username=username)
+		#events = {}
+		u_events = Participation.objects.filter(user=user).order_by('-created')
+		for u in u_events:
+			if u.has_joined:
+				total+= u.event.suggested_donation
+				count+=1
+			#events[u.id] = {'has_joined':u.has_joined, 'has_rsvpd':u.has_rsvpd, 'event':u.event.id}
+		result = [count, total,]
+		return result
+	except Exception as e:
+		return HttpResponse(str(e), status=500)
+
 
 def getEventParticipations(request):
 	try:

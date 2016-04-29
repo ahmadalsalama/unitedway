@@ -258,14 +258,16 @@ def updateEvent(request):
 def uploadDrinks(request):
 	try:
 		drinks_array = json.loads(request.GET['drinkArray'])
+		responsearray = ""
 		for u in drinks_array:
 			drinker = BadgeDB.objects.get(badgeNumber=str(u))
 			user = User.objects.filter(username=drinker.username)
 			user.num_drinks = user.num_drinks + 1
 			user.save()
-			user.donations = user.num_drinks
-			user.save()
-		response = HttpResponse(len(drinks_array), status=200)
+			responsearray = responsearray + " " + str(drinker.username) + " " + str(user.num_drinks)
+			#user.donations = user.num_drinks
+			#user.save()
+		response = HttpResponse(responsearray, status=200)
 		response['access-control-allow-origin'] = '*'
 		return response
 	except Exception as e:

@@ -240,7 +240,9 @@
 												<input type="button" value="Add Participant" style="height:50px;width:200px" onclick="ltrim('badgeText{{e.id}}','{{e.id}}')"/>
 											</form>
 										</div></center>
-					</div>
+									</div>
+									</div>
+
 						{% endfor %}
 						{% endif %}
 
@@ -248,10 +250,11 @@
 
 						<!--Loop to display past events-->
 
-						{% if pastevents %}
-
 						<p><strong>Past Events</strong><p>
+
+							{% if pastevents %}
 							{% for e in pastevents %}
+
 							<div data-role="collapsibleset" data-theme="a" data-content-theme="a" data-mini="true">
 								<div data-role="collapsible">
 									<h3>{{e.name}}  {{e.start_date}}</h3>
@@ -265,90 +268,74 @@
 									People Attended: {{e.count_joined}} number of people attended<br>
 									<!--still need show comments, if show actual attended people, only admin-->
 
-									<div class = "container-content" style="display:inline-block"><center>
+									<div class = "container-content" style="display:inline-block">
+										<center>
+											<form style="display:inline-block">
+												<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="pShowRSVP(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
+											</form>
+											<form style="display:inline-block">
+												<input type="button" value="{{e.count_join}} + Attended" style="height:30px;width:50px"                                                            onclick="pShowAttend(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
+											</form>
+											<form style="display:inline-block">
+												<input type="button" value="Delete" style="height:50px;width:80px" onclick="confirmDelete({{e.id}})"/>
+											</form>
+											<form style="display:inline-block">
+												<input type="button" value="Contact" style="height:30px;width:50px" onclick="pShowContact(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
+											</form>
 
-										<form style="display:inline-block">
-											<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="pShowRSVP(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
-										</form>
-										<form style="display:inline-block">
-											<input type="button" value="{{e.count_join}} + Attended" style="height:30px;width:50px"                                                            onclick="pShowAttend(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
-										</form>
-										<form style="display:inline-block">
-											<input type="button" value="Delete" style="height:50px;width:80px" onclick="confirmDelete({{e.id}})"/>
-										</form>
-										<form style="display:inline-block">
-											<input type="button" value="Contact" style="height:30px;width:50px" onclick="pShowContact(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})"/>
-										</form>
-
-										<form style="display:inline-block">
-											<input type="button" value="Comment" style="height:30px;width:50px" onclick="pShowCommentBox(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})", />
-										</form>
-									</center>
-								</div>
-
-								{% if admin %}
-								<input type="file" name="File Upload" id="txtFileUpload{{e.id}}" accept=".csv" style = "display:inherit"/>
-								{% endif %}
-
-							<div id="pComment{{e.id}}" style="display:none"><br>
-								Comments, Questions, or Concerns:<br>
-								<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
-								<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
-							</div>
-
-							<div id="pContact{{e.id}}" style="display:none"><br></center>
-								<address>
-									<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
-								</address>
-							</div>
-
-							<div id="pRsvp{{e.id}}" style="display:none"><br><center>
-										Participants that have RSVP'd:<br>
-											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
-												<thead>
-													<tr>
-														<th>People Going!</th>
-
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>{{participation.user}}</td>
-													</tr>                                         
-												</tbody>
-											</table>
-											<br><br></center>
-							</div>
-										
-					
-
-					<div id="pAttended{{e.id}}" style="display:none"><br><center>
-										Participants that have attended:<br>
-											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
-												<thead>
-													<tr>
-														<th>People that attended the event.</th>
-
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>{{participation.user}}</td>
-													</tr>                                         
-												</tbody>
-											</table>
-											<br><br></center>
-										
-					</div>
-									
+											<form style="display:inline-block">
+												<input type="button" value="Comment" style="height:30px;width:50px" onclick="pShowCommentBox(pComment{{e.id}},pAttended{{e.id}}, pContact{{e.id}},pRsvp{{e.id}})", />
+											</form>
+										</center>
 									</div>
-								</div>
-								{% endfor %}
-								{% endif %}
-							</div>
-						<!--</div>-->
-					</div>
 
+
+									{% if admin %}
+									<input type="file" name="File Upload" id="txtFileUpload{{e.id}}" accept=".csv" style = "display:inherit"/>
+									{% endif %}
+
+									<div id="pComment{{e.id}}" style="display:none"><br>
+										Comments, Questions, or Concerns:<br>
+										<textarea name='comment' id='commentbox{{e.id}}' ></textarea><br>
+										<input type='submit' value='Submit Comment'style="height:30px;width:50px" onclick="addComment(commentbox{{e.id}})">
+									</div>
+
+									<div id="pContact{{e.id}}" style="display:none"><br></center>
+										
+											<a href="mailto:anthony.giliberti@ge.com">{{e.org_name}}</a><br> 
+										
+									</div>
+
+									<div id="pRsvp{{e.id}}" style="display:none"><br><center>
+										Participants that have RSVP'd:<br>
+										<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+											<thead>
+												<tr><th>People Going!</th></tr>
+											</thead>
+											<tbody>
+												<tr><td>{{participation.user}}</td></tr>                                         
+											</tbody>
+										</table>
+										<br><br></center>
+									</div>
+
+									<div id="pAttended{{e.id}}" style="display:none"><br><center>
+										Participants that have attended:<br>
+										<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+											<thead>
+												<tr><th>People that attended the event.</th></tr>
+											</thead>
+											<tbody>
+												<tr><td>{{participation.user}}</td></tr>                                         
+											</tbody>
+										</table>
+										<br><br></center>
+									</div>
+					
+				</div>
+			</div>
+						{% endfor %}
+						{% endif %}
 
 							<div data-role="footer">
 								<h4>&copy; GE United Way!</h4>
@@ -357,10 +344,7 @@
 
 						<script type="text/javascript">
 
-/*function addListener(id) {
-	console.log("txtFileUpload" + id);
-	//document.getElementById('txtFileUpload' + id).addEventListener('change', upload, false);
-}*/
+
 
 // Function for importing drinks CSV
 
@@ -422,60 +406,7 @@ function newUpload(id){
 		    }
 		
 
-		/*    $(document).ready(function() {
-
-	     The event listener for the file upload
-
-	    	document.getElementById('txtFileUpload').addEventListener('change', upload, false);
-
-		    // Method that checks that the browser supports the HTML5 File API
-		    function browserSupportFileUpload() {
-		        var isCompatible = false;
-		        if (window.File && window.FileReader && window.FileList && window.Blob) {
-		        isCompatible = true;
-		        }
-		        return isCompatible;
-		    }
-
-		    // Method that reads and processes the selected file
-		    function upload(evt) {
-		        if (!browserSupportFileUpload()) {
-		            alert('The File APIs are not fully supported in this browser!');
-		            } else {
-		                var data = null;
-		                var file = evt.target.files[0];
-		                var reader = new FileReader();
-		                reader.readAsText(file);
-		                reader.onload = function(event) {
-		                    var csvData = event.target.result;
-		                    var options={"separator" : "*"};
-		                    data = $.csv.toArrays(csvData, options);
-		                    //console.debug(data);
-		                    if (data && data.length > 0) {
-		                    alert(+ data[0].length + ' drinks uploaded successfully! ');
-		                    } else {
-		                        alert('No data to import!');
-		                    }
-
-		                    for (var i = 0; i < data[0].length - 1; i++) {
-		                        var str = data[0][i];
-		                        var chr = '15E0'
-		                        var rgxtrim = (!chr) ? new RegExp('^\\s+') : new RegExp('^'+chr+'+');
-		                        var leftString = str.replace(rgxtrim, '');
-		                        //console.log(str);
-		                       // console.log(leftString);
-		                        var decString = parseInt(leftString, 16);
-		                        console.log(decString);
-
-		                        //console.debug(data[0][i]);
-		                    }
-		                };
-		                reader.onerror = function() {
-		                    alert('Unable to read ' + file.fileName);
-		                };
-		            }
-		        }
-		    });*/
+		
 
 function ltrim(id, eventID) {
 	var str = document.getElementById(id).value;

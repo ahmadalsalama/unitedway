@@ -156,10 +156,10 @@
 								<div class = "container-content" style="display:inline-block">
 
 									<form style="display:inline-block">
-										<input type="button" value="{{e.count_rsvp}} + RSVP'd" style="height:30px;width:50px"                                                            onclick="showRSVP(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
+										<input type="button" value="{{e.count_rsvpd}} RSVP'd" style="height:30px;width:50px"                                                            onclick="showRSVP(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
 									</form>
 									<form style="display:inline-block">
-										<input type="button" value="{{e.count_join}} + Attended" style="height:30px;width:50px"                                                            onclick="showAttend(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
+										<input type="button" value="{{e.count_joined}} Attended" style="height:30px;width:50px"                                                            onclick="showAttend(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
 									</form>
 									<form style="display:inline-block">
 										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}}, 'badgeText{{e.id}}')"/>
@@ -208,16 +208,16 @@
 						</div>
 
 						<div id="contact{{e.id}}" style="display:none"><br></center>
-							<address>
+							<address><center>
 								<a href="mailto:{{e.org_username}}@ge.com">{{e.org_name}}</a><br> 
-							</address>
+							</address></center>
 						</div>
 						<div id="rsvp{{e.id}}" style="display:none"><br><center>
 										Participants that have RSVP'd:<br>
-											<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+											<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
 												<thead>
 													<tr>
-														<th>RSVP:</th>
+														<th>RSVPs Received:</th>
 													</tr>
 												</thead>
 												{% for u in e.rsvpdlist %}
@@ -342,10 +342,10 @@
 
 									<div id="pRsvp{{e.id}}" style="display:none"><br><center>
 										Participants that have RSVP'd:<br>
-										<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+										<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
 												<thead>
 													<tr>
-														<th>RSVP:</th>
+														<th>RSVPs Received:</th>
 													</tr>
 												</thead>
 												{% for u in e.rsvpdlist %}
@@ -360,7 +360,7 @@
 									</div>
 									<center>
 
-									<div id="pAttended{{e.id}}" style="display:none"><br>
+									<div id="pAttended{{e.id}}" style="display:none"><br><center>
 										Participants that have attended:<br>
 										<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
 												<thead>
@@ -378,6 +378,7 @@
 												{% endfor %}
 											</table>
 											<br><br>
+										</center>
 									</div>
 									</center>
 					

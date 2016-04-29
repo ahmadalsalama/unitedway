@@ -16,9 +16,9 @@ USER_TYPES = ((True, 'Organizer'), (False, 'User'))
 @csrf_exempt
 def index(request):
 	try:
-		#if not User.objects.filter(username=str(request.META['geuid'])).exists():
-		#	query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", is_org=False, email=str(request.META['gemail']), donations=0)
-		#	query.save()
+		if not User.objects.filter(username=str(request.META['geuid'])).exists():
+			query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", is_org=False, email=str(request.META['gemail']), donations=0)
+			query.save()
 		return render(request,'api/events.html', {'admin': request.user.is_superuser, 'current_user': str(request.META['gefirstname'])+" "+str(request.META['gelastname']), 'events': getEvents(request, True).values(), 'pastevents': getPastEvents(request, True).values()})
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
@@ -54,10 +54,10 @@ def getEvents(request, index=False):
 			rlist = Participation.objects.filter(event=event, has_rsvpd=True)
 			joinedlist = []
 			for p in jlist:
-				joinedlist.append(p.user.username)
+				joinedlist.append(p.user.name)
 			rsvpdlist = []
 			for p in rlist:
-				rsvpdlist.append(p.user.username)
+				rsvpdlist.append(p.user.name)
 			count_joined = len(jlist)
 			count_rsvpd = len(rlist)
 			canEdit = canEdit or str(request.META['geuid']) == str(event.org.username)
@@ -78,10 +78,10 @@ def getPastEvents(request, index=False):
 			rlist = Participation.objects.filter(event=event, has_rsvpd=True)
 			joinedlist = []
 			for p in jlist:
-				joinedlist.append(p.user.username)
+				joinedlist.append(p.user.name)
 			rsvpdlist = []
 			for p in rlist:
-				rsvpdlist.append(p.user.username)
+				rsvpdlist.append(p.user.name)
 			count_joined = len(jlist)
 			count_rsvpd = len(rlist)
 			events[event.id] = {'id':event.id, 'name':event.name, 'rsvpdlist':rsvpdlist, 'joinedlist':joinedlist,'description':event.description,'max_capacity':event.max_capacity, 'suggested_donation':event.suggested_donation, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}

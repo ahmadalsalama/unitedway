@@ -98,8 +98,12 @@
 		    </table>
 		    
 			<br><br>
+
+			
+			
+
 		
-		<a href='mailto:cote@ge.com&bcc=212414600@ge.com;212416892@ge.com;212417086@ge.com?subject=Thank You for Attending Our United Way Events&body=Hi,%0AThank you for attending our United Way sponsored event.  Please visit our website at http://unitedway.corporate.ge.com to view results.%0A%0ARegards,%0AUnited Way Champions'><input type="button" value="Send Attendees Email" /><br></a>
+		<a href='mailto:{% for s in all_ssos %}bcc={{s.sso}}@ge.com;{% endfor %}?subject=Thank You for Attending Our United Way Events&body=Hi,%0AThank you for attending our United Way sponsored event.  Please visit our website at http://unitedway.corporate.ge.com to view results.%0A%0ARegards,%0AUnited Way Champions'><input type="button" value="Send Attendees Email" /><br></a>
 		</section>
 	</div>
 	<!-- /footer -->

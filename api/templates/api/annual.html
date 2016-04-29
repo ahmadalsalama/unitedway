@@ -28,10 +28,10 @@
             <div class="navbar-header">
               <a class="navbar-brand"><span class="ge-logo"></span> 
 					{% if admin %}
-						<span>Welcome to the United Way Admin Portal, Michelle!</span>
+						<span>Welcome to the United Way Admin Portal, {{current_user}}</span>
 					{% endif %}
 					{% if not admin %}
-						<span>Welcome to the United Way Engagement Portal, Michelle!</span>
+						<span>Welcome to the United Way Engagement Portal, {{current_user}}</span>
 					{% endif %}	</a>
             </div>
         </div>
@@ -99,11 +99,7 @@
 		    
 			<br><br>
 
-			
-			
-
-		
-		<a href='mailto: & bcc={% for s in all_ssos %}{{s.sso}}@ge.com;{% endfor %}?subject=Thank You for Attending Our United Way Events&body=Hi,%0AThank you for attending our United Way sponsored event.  Please visit our website at http://unitedway.corporate.ge.com to view results.%0A%0ARegards,%0AUnited Way Champions'><input type="button" value="Send Attendees Email" /><br></a>
+		<a href='mailto: anthony.giliberti@ge.com&bcc={% for s in all_ssos %}{{s.sso}}@ge.com;{% endfor %}?subject=Thank You for Attending a United Way Event!&body=Hi United Way Participant,%0A%0AThank you for attending one of our United Way sponsored events this year!  Please visit our website at http://unitedway.corporate.ge.com to view your suggested donation amount based on your event attendance throughout the year.%0A%0A And above all, remember to Live United! %0A%0ARegards,%0AUnited Way Champions'><input type="button" value="Send Attendees Email" /><br></a>
 		</section>
 	</div>
 	<!-- /footer -->

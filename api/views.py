@@ -50,11 +50,18 @@ def getEvents(request, index=False):
 		events = {}
 		canEdit = request.user.is_superuser
 		for event in Event.objects.filter(start_date__gte=datetime.today()):
-			count_joined = len(Participation.objects.filter(event=event, has_joined=True))
-			count_rsvpd = len(Participation.objects.filter(event=event, has_rsvpd=True))
+			jlist = Participation.objects.filter(event=event, has_joined=True)
+			rlist = Participation.objects.filter(event=event, has_rsvpd=True)
+			joinedlist = []
+			for p in jlist:
+				joinedlist.append(p.user.username)
+			rsvpdlist = []
+			for p in rlist:
+				joinedlist.append(p.user.username)
+			count_joined = len(jlist)
+			count_rsvpd = len(rlist)
 			canEdit = canEdit or str(request.META['geuid']) == str(event.org.username)
-			events[event.id] = {'id':event.id, 'canEdit':canEdit, 'name':event.name, 'suggested_donation':event.suggested_donation, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
-			#events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description, 'category':dict(CATEGORY_CHOICES)[event.category], 'start_date':event.start_date.strftime("%d-%m-%Y"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'org':event.org.name, 'count_liked':count_liked, 'count_joined':count_joined}
+			events[event.id] = {'id':event.id, 'canEdit':canEdit, 'name':event.name, 'rsvpdlist':rsvpdlist, 'joinedlist':joinedlist, 'suggested_donation':event.suggested_donation, 'description':event.description,'max_capacity':event.max_capacity, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
 		if index:
 			return events
 		response = JsonResponse(events, status=200, safe=False)
@@ -67,9 +74,17 @@ def getPastEvents(request, index=False):
 	try:
 		events = {}
 		for event in Event.objects.exclude(start_date__gte=datetime.today()):
-			count_joined = len(Participation.objects.filter(event=event, has_joined=True))
-			count_rsvpd = len(Participation.objects.filter(event=event, has_rsvpd=True))
-			events[event.id] = {'id':event.id, 'name':event.name, 'description':event.description,'max_capacity':event.max_capacity, 'suggested_donation':event.suggested_donation, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
+			jlist = Participation.objects.filter(event=event, has_joined=True)
+			rlist = Participation.objects.filter(event=event, has_rsvpd=True)
+			joinedlist = []
+			for p in jlist:
+				joinedlist.append(p.user.username)
+			rsvpdlist = []
+			for p in rlist:
+				joinedlist.append(p.user.username)
+			count_joined = len(jlist)
+			count_rsvpd = len(rlist)
+			events[event.id] = {'id':event.id, 'name':event.name, 'rsvpdlist':rsvpdlist, 'joinedlist':joinedlist,'description':event.description,'max_capacity':event.max_capacity, 'suggested_donation':event.suggested_donation, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
 		if index:
 			return events
 		response = JsonResponse(events, status=200, safe=False)

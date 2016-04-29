@@ -164,9 +164,12 @@
 									<form style="display:inline-block">
 										<input type="button" value="Track Attendance" style="height:50px;width:180px" onclick="showAttendance(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}}, 'badgeText{{e.id}}')"/>
 									</form> 
+
+									{% if canEdit %}
 									<form style="display:inline-block">
 										<input type="button" value="Edit" style="height:50px;width:60px" onclick="editEvent(comment{{e.id}},attended{{e.id}}, contact{{e.id}}, hidden{{e.id}},shown{{e.id}},rsvp{{e.id}}, attendance{{e.id}})"/>
 									</form> 
+									{% endif %}
 									<form style="display:inline-block">
 										<input type="button" value="Delete" style="height:50px;width:80px" onclick="confirmDelete({{e.id}})"/>
 									</form><br>
@@ -249,7 +252,7 @@
 
 						<!--Loop to display past events-->
 
-						{% if events %}
+						{% if pastevents %}
 
 						<p><strong>Past Events</strong><p>
 							{% for e in pastevents %}

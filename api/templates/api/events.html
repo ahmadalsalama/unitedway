@@ -186,7 +186,7 @@
 
 						<div id="comment{{e.id}}" style="display:none"><br>
 							Comments:<br>
-												{% for c in comments %}
+												{% for c in e.comments %}
 												<tbody>
 													<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
 													<tr>
@@ -213,11 +213,11 @@
 							</address></center>
 						</div>
 						<div id="rsvp{{e.id}}" style="display:none"><br><center>
-										Participants that have RSVP'd:<br>
-											<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+										<br>
+											<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke" >
 												<thead>
 													<tr>
-														<th>RSVPs Received:</th>
+														<th>RSVPs:</th>
 													</tr>
 												</thead>
 												{% for u in e.rsvpdlist %}
@@ -233,11 +233,11 @@
 					</div>
 
 					<div id="attended{{e.id}}" style="display:none"><br><center>
-										Participants that have attended:<br>
+										<br>
 											<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
 												<thead>
 													<tr>
-														<th>Attendee</th>
+														<th>Attendees</th>
 
 													</tr>
 												</thead>
@@ -319,7 +319,7 @@
 									</div>
 									<div id="pComment{{e.id}}" style="display:none"><br>
 										Comments:<br>
-												{% for c in comments %}
+												{% for c in e.comments %}
 												<tbody>
 													<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
 													<tr>
@@ -341,11 +341,11 @@
 									</div>
 
 									<div id="pRsvp{{e.id}}" style="display:none"><br><center>
-										Participants that have RSVP'd:<br>
-										<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke" style="height:30px;width:50px" >
+										<br>
+										<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke" >
 												<thead>
 													<tr>
-														<th>RSVPs Received:</th>
+														<th>RSVPs:</th>
 													</tr>
 												</thead>
 												{% for u in e.rsvpdlist %}
@@ -361,11 +361,11 @@
 									<center>
 
 									<div id="pAttended{{e.id}}" style="display:none"><br><center>
-										Participants that have attended:<br>
+										<br>
 										<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
 												<thead>
 													<tr>
-														<th>Attendee</th>
+														<th>Attendees</th>
 
 													</tr>
 												</thead>

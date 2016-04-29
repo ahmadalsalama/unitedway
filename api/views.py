@@ -29,7 +29,8 @@ def update(request):
 	return response
 
 def getAnnualStats(request):
-	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'my_sum': getUserEventsStats(request, str(request.META['geuid'])).values()})
+	mysum = getUserEventsStats(request, str(request.META['geuid']))[1]
+	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'my_sum': mysum})
 
 def getUsers(request):
 	try:
@@ -109,10 +110,8 @@ def getUserEventsStats(request, username):
 				total+= u.event.suggested_donation
 				count+=1
 			#events[u.id] = {'has_joined':u.has_joined, 'has_rsvpd':u.has_rsvpd, 'event':u.event.id}
-		result = [count, total]
-		response = JsonResponse(result, status=200, safe=False)
-		response['access-control-allow-origin'] = '*'
-		return response
+		result = [count, total,]
+		return result
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
 

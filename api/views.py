@@ -19,7 +19,7 @@ def index(request):
 		#if not User.objects.filter(username=str(request.META['geuid'])).exists():
 		#	query = User(username=str(request.META['geuid']), name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), country="U.S.A", is_org=False, email=str(request.META['gemail']), donations=0)
 		#	query.save()
-		return render(request,'api/events.html', {'admin': request.user.is_superuser, 'events': getEvents(request, True).values(), 'pastevents': getPastEvents(request, True).values()})
+		return render(request,'api/events.html', {'admin': request.user.is_superuser, 'current_user': name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), 'events': getEvents(request, True).values(), 'pastevents': getPastEvents(request, True).values()})
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
 
@@ -32,7 +32,7 @@ def update(request):
 def getAnnualStats(request):
 	mysum = getUserEventsStats(request, str(request.META['geuid']))[1]
 	#mysum = getUserEventsStats(request, "212447934")[1]
-	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'my_sum': mysum, 'all_attendees': getAllUserEventsStats(request).values(), 'all_ssos': getAllUserSSOs(request).values()})
+	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'current_user': name=str(request.META['gefirstname'])+" "+str(request.META['gelastname']), 'my_sum': mysum, 'all_attendees': getAllUserEventsStats(request).values(), 'all_ssos': getAllUserSSOs(request).values()})
 
 def getUsers(request):
 	try:
@@ -176,7 +176,7 @@ def getEventParticipations(request):
 
 @login_required(login_url='/admin/login')
 def createEvent(request):
-	return render(request,'api/create.html')
+	return render(request,'api/create.html', {'current_user': name=str(request.META['gefirstname'])+" "+str(request.META['gelastname'])})
 
 @csrf_exempt
 @login_required(login_url='/admin/login/')

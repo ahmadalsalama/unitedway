@@ -9,7 +9,8 @@ class User(models.Model):
 	username = models.CharField(max_length=15, primary_key=True) # SSO
 	name = models.CharField(max_length=30) # First & Last Name
 	country = models.CharField(max_length=30)
-	donations = models.IntegerField()
+	donations = models.IntegerField(default=0)
+	num_drinks = models.IntegerField(default=0)
 	email = models.CharField(max_length=30)
 	is_org = models.BooleanField('organizer', default=False)
 	def __str__(self):

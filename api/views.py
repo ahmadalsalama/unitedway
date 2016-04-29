@@ -57,7 +57,7 @@ def getEvents(request, index=False):
 				joinedlist.append(p.user.username)
 			rsvpdlist = []
 			for p in rlist:
-				joinedlist.append(p.user.username)
+				rsvpdlist.append(p.user.username)
 			count_joined = len(jlist)
 			count_rsvpd = len(rlist)
 			canEdit = canEdit or str(request.META['geuid']) == str(event.org.username)
@@ -81,7 +81,7 @@ def getPastEvents(request, index=False):
 				joinedlist.append(p.user.username)
 			rsvpdlist = []
 			for p in rlist:
-				joinedlist.append(p.user.username)
+				rsvpdlist.append(p.user.username)
 			count_joined = len(jlist)
 			count_rsvpd = len(rlist)
 			events[event.id] = {'id':event.id, 'name':event.name, 'rsvpdlist':rsvpdlist, 'joinedlist':joinedlist,'description':event.description,'max_capacity':event.max_capacity, 'suggested_donation':event.suggested_donation, 'catCode':2, 'category':"Social", 'start_date':event.start_date.strftime("%d-%m-%Y"), 'start_time':event.start_date.strftime("%H:%M"), 'end_date':event.end_date.strftime("%d-%m-%Y"), 'end_time':event.end_date.strftime("%H:%M"), 'org_username':event.org.username, 'org_name':event.org.name, 'count_rsvpd':count_rsvpd, 'count_joined':count_joined}
@@ -254,6 +254,20 @@ def updateEvent(request):
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
 
+@login_required(login_url='/admin/login/')
+def uploadDrinks(request):
+	try:
+		drinks_array = json.loads(request.GET['drinkArray'])
+		for u in drinks_array:
+			drinker = BadgeDB.objects.get(badgeNumber=str(u))
+			user = User.objects.filter(username=drinker.username)
+			user.num_drinks = user.num_drinks + 1
+			user.save()
+		response = HttpResponse(True, status=200)
+		response['access-control-allow-origin'] = '*'
+		return response
+	except Exception as e:
+		return HttpResponse(str(e), status=500)
 
 @csrf_exempt
 @login_required(login_url='/admin/login/')

@@ -30,7 +30,7 @@ def update(request):
 	return response
 
 def getAnnualStats(request):
-	mysum = getUserEventsStats(request, str(request.META['geuid']))[1]
+	mysum = getUserEventsStats(request, str(request.META['geuid']))[2]
 	#mysum = getUserEventsStats(request, "212447934")[1]
 	return render(request,'api/annual.html', {'admin': request.user.is_superuser, 'current_user': str(request.META['gefirstname'])+" "+str(request.META['gelastname']), 'my_sum': mysum, 'all_attendees': getAllUserEventsStats(request).values(), 'all_ssos': getAllUserSSOs(request).values()})
 
@@ -125,7 +125,8 @@ def getUserEventsStats(request, username):
 			if u.has_joined:
 				total+= u.event.suggested_donation
 				count+=1
-		result = [count, total,]
+		totalwithdrinks = total + 3*(user.num_drinks)
+		result = [count, total, totalwithdrinks]
 		return result
 	except Exception as e:
 		return HttpResponse(str(e), status=500)
@@ -142,6 +143,7 @@ def getAllUserEventsStats(request):
 				if u.has_joined:
 					total+= u.event.suggested_donation
 					count+=1
+			total = total + 3*(usr.num_drinks)
 			result[usr.username] = {'name':usr.name, 'sso':usr.username, 'count':int(count), 'total':total}
 			
 		#print result
@@ -264,10 +266,10 @@ def uploadDrinks(request):
 			user = User.objects.get(username=drinker.username)
 			user.num_drinks = user.num_drinks + 1
 			user.save()
-			responsearray = responsearray + " " + str(drinker.username) + " " + str(user.num_drinks)
+			#responsearray = responsearray + " " + str(drinker.username) + " " + str(user.num_drinks)
 			#user.donations = user.num_drinks
 			#user.save()
-		response = HttpResponse(responsearray, status=200)
+		response = HttpResponse(True, status=200)
 		response['access-control-allow-origin'] = '*'
 		return response
 	except Exception as e:
